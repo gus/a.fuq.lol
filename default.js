@@ -78,7 +78,7 @@ A: Basically, I didn't want to prevent common browser shortcuts from working; li
 \`Ctrl+t\` for opening a new tab. And, I wanted the modifier to be consistent. This
 might change.
 
-**Q: _"Why can't I delete any of these nonsense docs!"_ A: You will be able to soon!
+**Q: _"Why can't I delete any of these nonsense docs!"_** A: You will be able to soon!
 I promise!
 
 ---

@@ -1,0 +1,104 @@
+<html>
+
+<head>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Newsreader:ital,wght@0,400;0,600;1,400;1,600&family=Roboto+Condensed:wght@400;700&family=Roboto+Mono:ital,wght@0,400;0,600;1,400;1,600&family=Roboto+Slab:wght@400;700&family=Roboto:ital,wght@0,400;0,700;1,400;1,700&family=Volkhov:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.5.0/build/styles/monokai.min.css">
+    <link rel="stylesheet" type="text/css" href="./main.css?t=1613828243">
+
+    <script src="https://kit.fontawesome.com/b4b0919dd0.js" crossorigin="anonymous"></script>
+</head>
+
+<body class="dark">
+    <div class="container">
+        <div data-key="title" class="prompt" style="display: none">
+            <label>Title</label>
+            <input tabindex="3"></input>
+        </div>
+
+        <div data-key="help" class="prompt" style="display: none">
+            <div class="table">
+                <div class="tr">
+                    <i class="fab fa-markdown"></i>
+                    <span class="label">Toggle editor</span>
+                    <span class="shortcut">Alt + p</span>
+                </div>
+                <div class="tr">
+                    <i class="fas fa-file-signature"></i>
+                    <span class="label">Rename...</span>
+                    <span class="shortcut">Alt + t</span>
+                </div>
+                <div class="tr">
+                    <i class="fas fa-save"></i>
+                    <span class="label">Save document</span>
+                    <span class="shortcut">Alt + s</span>
+                </div>
+                <div class="tr">
+                    <i class="fas fa-file"></i>
+                    <span class="label">New document</span>
+                    <span class="shortcut">Alt + n</span>
+                </div>
+                <div class="tr">
+                    <i class="fas fa-folder-open"></i>
+                    <span class="label">Open document...</span>
+                    <span class="shortcut">Alt + o</span>
+                </div>
+                <div class="tr">
+                    <i class="fas fa-sad-cry"></i>
+                    <span class="label">Cancel (any prompt)</span>
+                    <span class="shortcut">Esc</span>
+                </div>
+            </div>
+        </div>
+
+        <div data-key="browser" class="prompt" style="display: none">
+            <input class="filter" tabindex="3" placeholder="Filter"></input>
+            <div class="scrollable">
+                <div class="table"></div>
+            </div>
+            <div style="clear: both;"></div>
+        </div>
+
+        <div id='editor' class="editor" style="display: none">
+            <textarea name="content" tabindex="1" spellcheck></textarea>
+        </div>
+
+        <div id="reader" class="reader" style="display: none"></div>
+
+        <div id="statusbar">
+            <div class="status">
+                <div class="section left">
+                    <i class="far fa-save save"></i>
+                </div>
+                <div class="section right">
+                    <span><i class="far fa-keyboard"></i> <span class="shortcut">Ctrl + /</span></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <template id="browser-document-listing">
+        <div class="tr clickable">
+            <i class="fab fa-markdown"></i>
+            <span class="label title">
+                <slot name="title"></slot>
+            </span>
+            <span class="date created_at">
+                <slot name="created_at"></slot>
+            </span>
+            <span class="date updated_at">
+                <slot name="updated_at"></slot>
+            </span>
+        </div>
+    </template>
+
+    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.5.0/build/highlight.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="./default.js?t=1613828244"></script>
+    <script src="./editor.js?t=1613828244"></script>
+    <script src="./main.js?t=1613828244"></script>
+</body>
+
+</html>

@@ -1,0 +1,371 @@
+body {
+    /*  When in doubt, Roboto */
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/**
+ * Layout: common across all themes, though nothing related to .reader should
+ * go here except for container related sizing/placement.
+ */
+
+ .container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.prompt {
+    display: block;
+    position: fixed;
+    width: 50%;
+    min-width: 10rem;
+    top:0;
+    left: 50%;
+    transform: translate(-50%, 0);
+    max-height: 50%;
+    overflow-y: auto;
+}
+
+.prompt .table .tr {
+    display: block;
+    display: flex;
+    flex-direction: row;
+    padding: 0.25rem 0;
+    align-items: center;
+}
+
+.prompt .table .tr span {
+    display: inline-flex;
+    align-items: center;
+}
+
+.prompt .table .tr .title {
+    cursor: pointer;
+}
+
+.prompt .table .tr .label {
+    flex-grow: 1;
+}
+
+.prompt .table .tr .date {
+    white-space: nowrap;
+}
+
+.prompt .table .tr > i:first-child {
+    display: block;
+    min-width: 3rem;
+}
+
+.editor {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.editor textarea {
+    display: block;
+    flex-grow: 1;
+    padding: 0.5rem 0.5rem 2.5rem 0.5rem ;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    resize: none;
+}
+
+.editor .tray {
+    display: block;
+    float: left;
+}
+
+.editor .tray .group {
+    display: flex;
+    flex-direction: row;
+    padding: 1rem 0;
+}
+
+.editor .tray label {
+    display: block;
+    float: left;
+    width: auto;
+    text-transform: uppercase;
+    margin-right: 0.5rem;
+    padding-top: 0.2rem;
+}
+
+.editor .tray input {
+    display: block;
+    float: left;
+    flex-grow: 1;
+    resize: none;
+}
+
+#statusbar {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+.status {
+    padding: 0.5rem 0.5rem;
+    display: flex;
+}
+
+.status .section {
+    flex-grow: 1;
+    display: block;
+    align-items: center;
+}
+
+.status .section.right {
+    text-align: right;
+}
+
+/**
+ * Themes
+ * 
+ * High-level modes are addressable via the following classes:
+ *
+ * - .editor  - Components related to editing a scratch
+ * - .reader - Components related to rendering a scratch for reading
+ * - .browser - Components related to rendering a view of scratches to choose
+ */
+
+
+/*
+ * base - common across themes, but kind of opinionated
+ *
+ * this is more for defining consistent fonts and font-sizes and so-forth.
+ * default browser colors will be used for everything here.
+ */
+
+.reader {
+    font-family: 'Newsreader', serif;
+    font-size: 110%;
+    margin: auto;
+    width: 75%;
+    padding-bottom: 1.5rem;
+}
+
+.reader h1, .dark .reader h2 {
+    font-family: 'Volkhov', serif;
+}
+
+.reader img {
+    max-width: 100%;
+}
+
+.reader pre {
+    padding: 1rem;
+    border-radius: 0.5rem;
+    overflow: auto;
+}
+
+.reader pre code {
+    font-family: 'Fira Code', monospace;
+    font-size: 85%;
+}
+
+.reader blockquote {
+    font-style: italic;
+    font-weight: 600;
+    font-size: 135%;
+    width: 70%;
+    margin: auto;
+}
+
+.reader table {
+    table-layout: fixed;
+    width: 100%;
+    border-collapse: collapse;
+    border: 0px;
+}
+
+.reader th, .reader td {
+    padding: 0.4rem;
+}
+
+.reader table thead {
+    font-family: 'Roboto', sans-serif;
+}
+
+.reader table tbody {
+    font-family: 'Fira Code', monospace;
+}
+
+.editor {
+    font-family: 'Roboto Condensed', sans-serif;
+}
+
+.editor textarea {
+    font-family: 'Fira Code', monospace;
+    outline: none;
+    border: 0;
+}
+
+.browser {
+    font-family: 'Roboto Condensed', sans-serif;
+}
+
+.shortcut {
+    font-family: 'Roboto Condensed', sans-serif;
+    font-style: italic;
+}
+
+.prompt {
+    font-family: 'Roboto', sans-serif;
+    padding: 1.5rem 1rem 1rem 1rem;
+    background-color: #eee;
+    border-bottom-left-radius: 0.25rem;
+    border-bottom-right-radius: 0.25rem;
+    box-shadow: 0px 1px 4px black;
+}
+
+.prompt.table > div {
+    padding: 0.25rem 0;
+}
+
+.prompt label {
+    display: block;
+}
+
+.prompt input {
+    width: 100%;
+}
+
+.prompt .shortcut {
+    font-size: 75%;
+}
+
+.prompt .table .tr .date {
+    font-size: 75%;
+    padding-left: 1.5em;
+}
+
+.prompt .tr.clickable {
+    border-bottom: 1px solid transparent;
+}
+
+.prompt .tr.clickable:hover {
+    border-bottom: 1px solid black;
+}
+
+input {
+    background-color: transparent;
+    border: 0;
+    border-bottom: 1px solid black;
+    outline: none;
+    font-family: 'Fira Code', monospace;
+    font-size: 115%;
+}
+
+.status {
+    font-family: 'Roboto Condensed', sans-serif;
+    font-size: 85%;
+    background: #eee;
+}
+
+i.far.alert, i.fab.alert, i.fas.alert {
+    color: orangered;
+}
+
+/* dark theme */
+
+.dark {
+    background-color: #181a1b;
+    color: white;
+}
+
+.dark::-webkit-scrollbar, .dark ::-webkit-scrollbar {
+    background-color: #252829;
+    color: #c5bdb0;
+}
+.dark::-webkit-scrollbar-track, .dark ::-webkit-scrollbar-track {
+    background-color: #1c1e1f;
+}
+.dark::-webkit-scrollbar-corner, .dark ::-webkit-scrollbar-corner {
+    background-color: #1c1e1f;
+}
+.dark::-webkit-scrollbar-thumb, .dark ::-webkit-scrollbar-thumb {
+    background-color: #4f5559;
+}
+.dark::-webkit-scrollbar-thumb:hover, .dark ::-webkit-scrollbar-thumb:hover {
+    background-color: #646c71;
+}
+.dark::-webkit-scrollbar-thumb:active, .dark ::-webkit-scrollbar-thumb:active {
+    background-color: #535a5d;
+}
+
+.dark .reader {
+    color: #eee;
+}
+
+.dark .reader a, .dark .reader a:visited {
+    color: palevioletred;
+}
+
+.dark .reader a, .dark .reader a:hover {
+    color: pink;
+}
+
+.dark .reader hr {
+    border-color: #484a4b;
+}
+
+.dark .reader pre {
+    background-color: #252833;
+}
+
+.dark .reader blockquote {
+    text-shadow: 2px 2px 3px black;
+}
+
+.dark .reader thead tr {
+    background-color: #252833;
+}
+
+.dark .reader tbody tr {
+    border-bottom: 1px solid #252833;
+}
+
+.dark .editor textarea, .dark .editor input {
+    background-color: #252833;
+    color: #eee;
+}
+
+.dark .prompt {
+    background-color: #353853;
+    color: lavender;
+}
+
+.dark .prompt .date {
+    color: slategray;
+}
+
+.dark .prompt .tr.clickable:hover {
+    border-bottom: 1px solid pink;
+}
+
+.dark .shortcut {
+    color: aquamarine;
+}
+
+.dark input {
+    color: lavender;
+    border-bottom: 1px solid lavender;
+}
+
+.dark .status {
+    background-color: #151833;
+    color: lavender;
+}
+
+.dark i.far, .dark i.fab, .dark i.fas {
+    color: slategray;
+}
+
+.dark i.far.alert, .dark i.fab.alert, .dark i.fas.alert {
+    color: palevioletred;
+}
+

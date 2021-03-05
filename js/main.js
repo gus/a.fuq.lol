@@ -98,6 +98,7 @@ function main() {
         doc = db.newDocument();
         curDoc.document = doc;
         $viewer.primary();
+        $prompts.toggle("title");
     });
 
     curDoc.addEventListener("document-change", ev => {

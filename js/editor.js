@@ -162,7 +162,7 @@ class ScratchDocument extends EventTarget {
     }
 
     get title() {
-        return this.isOpen() ? (this._doc.title || this._doc.id) : "";
+        return this.isOpen() ? this._doc.title : "";
     }
 
     set title(str) {
@@ -381,9 +381,7 @@ class ScratchTitlePrompt extends ScratchComponent {
 
     show() {
         super.show();
-        if (!this.hidden()) {
-            this.focus();
-        }
+        this.focus();
     }
 
     focus() {

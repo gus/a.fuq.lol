@@ -1,3 +1,5 @@
+const AUTOSAVE_MILLIS = 5000; // 5 seconds
+
 const DefaultDocument = `
 # Hello, World!
 

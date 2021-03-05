@@ -77,13 +77,11 @@ function main() {
         }
     });
 
-    // setInterval(document.dispatchEvent(new CustomEvent("x-save")), 5000)
-
     document.addEventListener("x-save", ev => {
         if (curDoc.title.length === 0) {
-            console.log(`--${curDoc.title.length}--`)
-            $statusbar.message("WARN", "Set document title in order to save (Alt + t)");
+            $statusbar.message("ALERT", "Set document title in order to save (Alt + t)");
         } else {
+            $statusbar.clearMessage();
             db.saveDocument(curDoc.document);
         }
     });
@@ -113,6 +111,9 @@ function main() {
         db.saveDocument(defDoc);
         $viewer.secondary(); // read mode
     }
+
+    // attempt to save every 5 seconds
+    setInterval(() => { document.dispatchEvent(new CustomEvent("x-save")) }, AUTOSAVE_MILLIS);
 }
 
 window.addEventListener("DOMContentLoaded", main);

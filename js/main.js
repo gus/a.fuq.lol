@@ -51,21 +51,6 @@ function main() {
 
     const $statusbar = new StatusBar(document.querySelector("#statusbar"), curDoc, db);
 
-    curDoc.document = db.lastSavedDocument(); // try and open the last saved document
-    if (curDoc.isOpen()) {
-        // there is a current document, but if it has no content just start editing
-        curDoc.empty() ? $viewer.primary() : $viewer.secondary();
-    } else {
-        // probably a new session; build the default doc and stuff
-        // TODO: what if they deleted all of their docs (which they can't do yet)
-        let defDoc = db.newDocument();
-        curDoc.document = defDoc;
-        curDoc.content = DefaultDocument;
-        curDoc.title = "Hello, World!";
-        db.saveDocument(curDoc.document);
-        $viewer.secondary();
-    }
-
     // shortcut router
     document.addEventListener("keydown", ev => {
         const sc = Shortcuts[keycombo(ev)];
@@ -95,7 +80,7 @@ function main() {
     });
 
     document.addEventListener("x-new", ev => {
-        doc = db.newDocument();
+        let doc = db.newDocument();
         curDoc.document = doc;
         $viewer.primary();
         $prompts.toggle("title");
@@ -104,6 +89,21 @@ function main() {
     curDoc.addEventListener("document-change", ev => {
         curDoc.empty() ? $viewer.primary() : $viewer.secondary();
     });
+
+    curDoc.document = db.lastSavedDocument(); // try and open the last saved document
+    if (curDoc.isOpen()) {
+        // there is a current document, but if it has no content just start editing
+        curDoc.empty() ? $viewer.primary() : $viewer.secondary();
+    } else {
+        // probably a new session; build the default doc and stuff
+        // TODO: what if they deleted all of their docs (which they can't do yet)
+        let defDoc = db.newDocument();
+        defDoc.content = DefaultDocument;
+        defDoc.title = "Hello, World!";
+        curDoc.document = defDoc;
+        db.saveDocument(defDoc);
+        $viewer.secondary(); // read mode
+    }
 }
 
 window.addEventListener("DOMContentLoaded", main);

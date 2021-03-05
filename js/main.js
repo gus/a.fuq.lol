@@ -56,6 +56,7 @@ function main() {
     document.addEventListener("keydown", ev => {
         const sc = Shortcuts[keycombo(ev)];
         if (sc) {
+            $statusbar.clearMessage();
             // we have a shortcut for this keycombo, so prevent propagation
             ev.preventDefault();
             ev.stopPropagation();
@@ -76,8 +77,15 @@ function main() {
         }
     });
 
+    // setInterval(document.dispatchEvent(new CustomEvent("x-save")), 5000)
+
     document.addEventListener("x-save", ev => {
-        db.saveDocument(curDoc.document);
+        if (curDoc.title.length === 0) {
+            console.log(`--${curDoc.title.length}--`)
+            $statusbar.message("WARN", "Set document title in order to save (Alt + t)");
+        } else {
+            db.saveDocument(curDoc.document);
+        }
     });
 
     document.addEventListener("x-new", ev => {

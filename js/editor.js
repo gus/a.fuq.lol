@@ -454,6 +454,7 @@ class StatusBar extends ScratchComponent {
     constructor($panel, curDoc, db) {
         super($panel, curDoc);
         this.db = db;
+        this.$message = $panel.querySelector(".message");
         this.$saveStatus = $panel.querySelector("i.save");
 
         let self = this;
@@ -461,15 +462,23 @@ class StatusBar extends ScratchComponent {
         this.db.addEventListener("save-document", ev => { self.handleSaveDocument(ev) })
     }
 
+    message(level, msg) {
+        this.$message.innerHTML = `<span class="${level}">${msg}</span>`;
+    }
+
+    clearMessage() {
+        this.$message.innerHTML = "";
+    }
+
     handleTitleChange(ev) {
         this.handleContentChange(ev)
     }
 
     handleContentChange(ev) {
-        this.$saveStatus.classList.add("alert");
+        this.$saveStatus.classList.add("ALERT");
     }
 
     handleSaveDocument(ev) {
-        this.$saveStatus.classList.remove("alert");
+        this.$saveStatus.classList.remove("ALERT");
     }
 }

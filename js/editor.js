@@ -362,6 +362,7 @@ class ScratchTitlePrompt extends ScratchComponent {
         let self = this;
         this.doc.addEventListener("document-change", ev => { self.handleDocumentChange(ev) })
         this.$title.addEventListener("input", ev => { self.handleInputChange(ev) })
+        this.$title.addEventListener("keypress", ev => { self.handleEnterKey(ev) })
     }
 
     handleDocumentChange(ev) {
@@ -370,6 +371,12 @@ class ScratchTitlePrompt extends ScratchComponent {
 
     handleInputChange(ev) {
         this.doc.title = this.$title.value;
+    }
+
+    handleEnterKey(ev) {
+        if (ev.code === "Enter") {
+            document.dispatchEvent(new CustomEvent("x-toggle", { detail: { "scope": "prompt" } }))
+        }
     }
 
     show() {

@@ -73,7 +73,7 @@ function main() {
             // we have a shortcut for this keycombo, so prevent propagation
             ev.preventDefault();
             ev.stopPropagation();
-            document.dispatchEvent(new CustomEvent(sc.event, { detail: sc }))
+            document.dispatchEvent(new CustomEvent(sc.event, { detail: sc }));
         }
     });
 

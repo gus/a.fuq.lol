@@ -27,6 +27,7 @@ const PromptClassMap = {
 // code|shift|ctrl|alt|meta : {"event": "x-<event-name>", ["scope": ("prompt"|"view"), ["key": "<key>"]]}
 const Shortcuts = {
     "KeyS|false|false|true|false": { "event": "x-save" },
+    "KeyS|false|true|false|false": { "event": "x-save" }, // this happens enough, we might as well catch it
     "KeyN|false|false|true|false": { "event": "x-new" },
     "KeyP|false|false|true|false": { "event": "x-toggle", "scope": "view" },
     "KeyT|false|false|true|false": { "event": "x-toggle", "scope": "prompt", "key": "title" },

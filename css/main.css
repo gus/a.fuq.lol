@@ -236,6 +236,7 @@ body {
 
 .prompt .shortcut {
     font-size: 75%;
+    margin-left: 0.25rem;
 }
 
 .prompt .table .tr .date {

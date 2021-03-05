@@ -37,11 +37,11 @@ const Shortcuts = {
 
 function main() {
     const db = new ScratchDB();
-    let curDoc = new ScratchDocument();
+    const curDoc = new ScratchDocument();
 
-    const $reader = new ScratchEditor(document.querySelector("#editor"), curDoc);
-    const $editor = new ScratchReader(document.querySelector("#reader"), curDoc);
-    const $viewer = new BinaryToggler($reader, $editor);
+    const $viewer = new BinaryToggler(
+        new ScratchEditor(document.querySelector("#editor"), curDoc),
+        new ScratchReader(document.querySelector("#reader"), curDoc));
 
     const $prompts = new MultiComponentToggler();
     document.querySelectorAll(".prompt").forEach($prompt => {
@@ -53,11 +53,11 @@ function main() {
 
     curDoc.document = db.lastSavedDocument(); // try and open the last saved document
     if (curDoc.isOpen()) {
-        // if the current document has no content, they probably want to edit it
-        // stright away.
+        // there is a current document, but if it has no content just start editing
         curDoc.empty() ? $viewer.primary() : $viewer.secondary();
     } else {
         // probably a new session; build the default doc and stuff
+        // TODO: what if they deleted all of their docs (which they can't do yet)
         let defDoc = db.newDocument();
         curDoc.document = defDoc;
         curDoc.content = DefaultDocument;
@@ -80,6 +80,9 @@ function main() {
     document.addEventListener("x-toggle", ev => {
         if (ev.detail.scope === "prompt") {
             $prompts.toggle(ev.detail.key);
+            if ($prompts.hidden()) {
+                $viewer.focus();
+            }
         } else if (ev.detail.scope === "view") {
             $viewer.toggle();
         } else {

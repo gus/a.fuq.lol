@@ -286,6 +286,7 @@ class BinaryToggler {
     }
 
     primary() {
+        this.secondaryView.blur();
         this.secondaryView.hide();
         this.primaryView.show();
         this.primaryView.focus();
@@ -295,6 +296,11 @@ class BinaryToggler {
         this.primaryView.blur();
         this.primaryView.hide();
         this.secondaryView.show();
+        this.secondaryView.focus();
+    }
+
+    focus() {
+        this.primaryView.hidden() ? this.secondaryView.focus() : this.primaryView.focus();
     }
 }
 
@@ -308,6 +314,10 @@ class MultiComponentToggler {
 
     register(name, $component) {
         this.components[name] = $component;
+    }
+
+    hidden() {
+        return this.activeComponent === null;
     }
 
     toggle(key) {

@@ -1,10 +1,10 @@
 const DefaultDocument = `
 # Hello, World!
 
-You have found \`${window.location.hostname}\`. Congratulations?
+You have found **_Fuq Docs_**. Congratulations?
 
 Well ... now you can save notes in markdown and read/preview those rendered
-notes. These notes never leave your browser profile. There are no ads. There
+notes. These documents never leave your browser profile. There are no ads. There
 are no ad-trackers.
 
 You can't (currently) share your notes. This "app" gets completely out of

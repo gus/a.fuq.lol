@@ -1,12 +1,38 @@
 <html>
 
 <head>
+    <title>Fuq Docs - Fast, simple, local Markdown note editing and previewing</title>
+
+    <meta name="description" content="Fuq Docs is a basic web-app allowing you
+                to easily take local notes in Markdown format
+                and preview those rendered notes in HTML. Your
+                documents are completely private as they are never
+                shared or even leave your browser. Fuq Docs uses
+                your browser's own local-storage for managing
+                all of your documents. No ads, no trackers, no nonsense.">
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Fuq Docs",
+        "browserRequirements": "requires HTML5 support",
+        "operatingSystem": "Linux, Windows, OSX",
+        "applicationCategory": "UtilitiesApplication",
+        "offers": {
+            "@type": "Offer",
+            "price": "0.00",
+            "priceCurrency": "USD"
+        }
+    }
+    </script>
+
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link
         href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Newsreader:ital,wght@0,400;0,600;1,400;1,600&family=Roboto+Condensed:wght@400;700&family=Roboto+Mono:ital,wght@0,400;0,600;1,400;1,600&family=Roboto+Slab:wght@400;700&family=Roboto:ital,wght@0,400;0,700;1,400;1,700&family=Volkhov:ital,wght@0,400;0,700;1,400;1,700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.5.0/build/styles/monokai.min.css">
-    <link rel="stylesheet" type="text/css" href="./main.css?t=1614844012">
+    <link rel="stylesheet" type="text/css" href="./css/main.css?t=1614844012">
 
     <script src="https://kit.fontawesome.com/b4b0919dd0.js" crossorigin="anonymous"></script>
 </head>
@@ -96,9 +122,9 @@
 
     <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.5.0/build/highlight.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <script src="./default.js?t=1614844012"></script>
-    <script src="./editor.js?t=1614844012"></script>
-    <script src="./main.js?t=1614844012"></script>
+    <script src="./js/default.js?t=1614844012"></script>
+    <script src="./js/editor.js?t=1614844012"></script>
+    <script src="./js/main.js?t=1614844012"></script>
 </body>
 
 </html>

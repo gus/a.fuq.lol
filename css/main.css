@@ -356,6 +356,11 @@ i.far.alert, i.fab.alert, i.fas.alert {
     border-bottom: 1px solid lavender;
 }
 
+.dark input[type="checkbox"] {
+    color: red;
+}
+
+
 .dark .status {
     background-color: #151833;
     color: lavender;

@@ -99,7 +99,7 @@ function main() {
     }
 
     // attempt to save every 5 seconds
-    // setInterval(() => { document.dispatchEvent(new CustomEvent(Events.UserSave)) }, AUTOSAVE_MILLIS);
+    setInterval(() => { document.dispatchEvent(new CustomEvent(Events.UserSave)) }, AUTOSAVE_MILLIS);
 }
 
 window.addEventListener("DOMContentLoaded", main);

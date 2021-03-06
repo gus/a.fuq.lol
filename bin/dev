@@ -1,0 +1,324 @@
+#!/usr/bin/env bash
+
+BIN=$(basename ${BASH_SOURCE[0]})
+
+# big assumption that we're in a git repo
+ROOTDIR=$(git rev-parse --show-toplevel)
+
+PROJECT_NAME=$(basename ${ROOTDIR})
+
+CONFIG_DIR=~/.config
+SHARE_DIR=~/.local/share
+DEV_CONFIG_DIR=${CONFIG_DIR}/dev/${PROJECT_NAME}
+DEV_SHARE_DIR=${SHARE_DIR}/dev/${PROJECT_NAME}
+DEVRC_FILENAME=.devrc
+
+## helper functions
+
+function log() {
+    (>&2 echo -e "${1}")
+}
+
+function log_err() {
+    log "[ERR] ${1}"
+}
+
+function log_warn() {
+    log "[WARN] ${1}"
+}
+
+function log_info() {
+    log "[INFO] ${1}"
+}
+
+function die() {
+    log_err "${1}"
+    exit 1
+}
+
+## usage
+
+usage_text=$(cat <<EOUSAGE
+usage: ${BIN} [GLOBAL OPTIONS] <command> [OPTIONS] [<args> ...]
+
+GLOBAL OPTIONS
+\t--project\tname of this project (default: ${PROJECT_NAME})
+\t--config-dir\tbase path where dev configs are stored (default: ${CONFIG_DIR})
+\t--share-dir\tbase path where dev shared files are stored (default: ${SHARE_DIR})
+
+COMMANDS
+\tinit\tinitialize this dev project
+\tbuild\tbuild the dev environment
+\trun\trun the dev environment (you will drop into a shell)
+\tssh-key\t...
+\tconfig\tprint the config for this dev project
+
+ARGS
+\tremaining args to pass to ...
+EOUSAGE
+)
+
+function usage() {
+    echo -e "${usage_text}"
+    exit 0
+}
+
+function usage_err() {
+    die "${1}\n\n${usage_text}"
+}
+
+## command helpers
+
+function load_devrc() {
+    local devrc="${1}"
+    test -f ${devrc} || die "file not found: ${devrc}"
+    log_info "- loading ${devrc}"
+    source ${devrc}
+}
+
+function require_init() {
+    log_info "validating ${PROJECT_NAME} config"
+    load_devrc ${DEVRC}
+
+    test -d "${DEV_USER_HOME}" || die "shared dir not found: '${DEV_USER_HOME}'"
+    log_info "- found ${DEV_USER_HOME}"
+}
+
+## init command
+
+function generate_rc() {
+    # depends on vars defined in main
+    cat <<-EORC
+PROJECT_NAME=${PROJECT_NAME}
+
+# local settings
+USER_HOME=${DEV_USER_HOME}
+
+# container settings
+IMAGE_NAME=dev/${PROJECT_NAME}
+CONTAINER_NAME=dev-${PROJECT_NAME}
+CONTAINER_USER=dev
+CONTAINER_HOME=/home/dev
+CONTAINER_UID=$(id -u)
+CONTAINER_GID=$(id -g)
+
+# docker settings
+DOCKERFILE=${ROOTDIR}/dev.Dockerfile
+DOCKER_RUN_OPTS="--hostname dev.${PROJECT_NAME} --net host -v ${ROOTDIR}:/workspace/dev -v ${DEV_USER_HOME}:/home/dev"
+EORC
+}
+
+# for use as sub-vars
+# TODO find alternative way to sandbox the available vars for subsitution
+SUB_GIT_USER_NAME="$(git config user.name)"
+SUB_GIT_USER_EMAIL="$(git config user.email)"
+
+function sub_var() {
+    # extract the var name (without mustaches)
+    local var_name=SUB_$(grep -Eo '\w+' <<< "${1}")
+    # return the var value, if any (replace '@' with '\@' to avoid confusing the main sub)
+    echo -en "${!var_name}" | sed -e 's/@/\\@/g'
+}
+
+function sub_template() {
+    # load the template contents from its file
+    local tmpl=$(cat ${1})
+    # find the unique set of vars to substitute (with mustaches)
+    local subs=$(grep -Eio '\{\{\s*[a-z0-9_]+\s*\}\}' <<< "${tmpl}" | sort | uniq)
+    # substitute placeholders with actual value
+    for sub in ${subs}; do
+        tmpl=$(sed -e 's@'"${sub}"'@'"$(sub_var ${sub})"'@g' <<< "${tmpl}")
+    done
+
+    # return substituted template contents
+    cat <<< "${tmpl}"
+}
+
+function process_template_dir() {
+    local srcdir=${1}
+    local dstdir=${2}
+
+    test -d "${srcdir}" || die "source directory does not exist: '${srcdir}'"
+    test -d "${dstdir}" || die "destination directory does not exist: '${dstdir}'"
+
+    # create subdirs ahead of time (skip .git dirs)
+    for subdir in $(find ${srcdir} -not -path '*/\.git' -type d | sed -E 's@'${srcdir}'\/?@@'); do
+        test -d ${dstdir}/${subdir} || {
+            log_info "-- creating directory: ${subdir}"
+            mkdir -p ${dstdir}/${subdir}
+        }
+    done
+
+    # process template files and create them destination dir (skip .gitkeep)
+    for file in $(find ${srcdir} -not -path '*/\.gitkeep' -type f | sed -E 's@'${srcdir}'\/?@@'); do
+        [ -f ${dstdir}/${file} ] && log_info "-- skipping file: ${file}" || {
+            log_info "-- creating file: ${dstdir}/${file}"
+            sub_template ${srcdir}/${file} > ${dstdir}/${file}
+        }
+    done
+}
+
+function init_cmd() {
+    log_info "initializing ${PROJECT_NAME}"
+
+    log_info "- creating ${DEVRC}"
+    mkdir -p ${DEV_CONFIG_DIR}
+    generate_rc > ${DEVRC}
+
+    log_info "- populating ${DEV_USER_HOME}"
+    mkdir -p ${DEV_USER_HOME}
+    process_template_dir ${ROOTDIR}/lib/dev/share/home ${DEV_USER_HOME}
+}
+
+## build command
+
+function ensure_docker() {
+    log_info "- locating docker"
+    type -P docker >/dev/null || die "docker not found"
+}
+
+function build_cmd() {
+    log_info "building ${PROJECT_NAME}"
+    ensure_docker
+    log_info "- check for dev Dockerfile '${DOCKERFILE}'"
+    test -f ${DOCKERFILE} || die "file ${DOCKERFILE} not found"
+	DOCKER_BUILDKIT=1 docker build \
+		-t ${IMAGE_NAME} \
+		--build-arg DEV_PROJECT_NAME=${PROJECT_NAME} \
+		--build-arg USER=${CONTAINER_USER} \
+		--build-arg UID=${CONTAINER_UID} \
+		--build-arg GID=${CONTAINER_GID} \
+		-f ${DOCKERFILE} .
+}
+
+## run command
+
+function run_cmd() {
+    log_info "running ${PROJECT_NAME}"
+    ensure_docker
+    docker inspect ${CONTAINER_NAME} >/dev/null 2>&1
+    if [ $? -eq 0 ]; then
+        log_info "- using existing container=${CONTAINER_NAME}"
+        # default to /bin/bash if no other args provided
+        docker exec -it ${CONTAINER_NAME} ${@:-/bin/bash}
+    else
+        log_info "- starting new container=${CONTAINER_NAME}"
+        docker run --rm -it --name ${CONTAINER_NAME} ${DOCKER_RUN_OPTS} ${IMAGE_NAME} ${@}
+    fi
+}
+
+## ssh-key command
+
+function ssh_key_gen_cmd() {
+	log_info "generating new ssh-key for dev user '${CONTAINER_USER}'"
+    # TODO add a -f (force) option
+    local priv_key_file="${DEV_USER_HOME}/.ssh/id_rsa"
+	if [ ! -f ${priv_key_file} ]; then
+        run_cmd ssh-keygen -f ${CONTAINER_HOME}/.ssh/id_rsa -t rsa -b 4096
+    else
+		log_warn "- ssh-key already exists"
+	fi
+}
+
+function ssh_key_rm_cmd() {
+	log_info "removing ssh-key for dev user '${CONTAINER_USER}'"
+
+    local priv_key_file="${DEV_USER_HOME}/.ssh/id_rsa"
+    test -f ${priv_key_file} && rm ${priv_key_file} || log_warn "- file does not exist: ${priv_key_file}"
+
+    local pub_key_file="${DEV_USER_HOME}/.ssh/id_rsa.pub"
+    test -f ${pub_key_file} && rm ${pub_key_file} || log_warn "- file does not exist: ${pub_key_file}"
+}
+
+function ssh_key_show_cmd() {
+	log_info "showing ssh-key for dev user '${CONTAINER_USER}'"
+    echo
+    local pub_key_file="${DEV_USER_HOME}/.ssh/id_rsa.pub"
+    cat ${pub_key_file}
+}
+
+function ssh_key_cmd() {
+    local sub_cmd="${1-noop}"
+    case "${sub_cmd}" in
+    gen )
+        ssh_key_gen_cmd
+        ssh_key_show_cmd
+        ;;
+    rm )
+        ssh_key_rm_cmd
+        ;;
+    show )
+        ssh_key_show_cmd
+        ;;
+    * )
+        usage_err "unrecognized ssh-key sub-command: ${sub_cmd}"
+        ;;
+    esac
+}
+
+##
+## main
+
+# step 1: command parser and global options
+
+CMD=""
+
+while test ${#} -gt 0; do
+    case "${1}" in
+    --config-dir )
+        shift; CONFIG_DIR=${1}; shift
+        ;;
+    --share-dir )
+        shift; SHARE_DIR=${1}; shift
+        ;;
+    --project )
+        shift; PROJECT_NAME=${1}; shift
+        ;;
+    -h | --help )
+        usage
+        ;;
+    -* )
+        usage_err "unrecognized option ${1}"
+        ;;
+    * )
+        CMD=${1}; shift
+        break
+        ;;
+    esac
+done
+
+DEV_CONFIG_DIR=${CONFIG_DIR}/dev/${PROJECT_NAME}
+DEV_SHARE_DIR=${SHARE_DIR}/dev/${PROJECT_NAME}
+
+DEVRC=${DEV_CONFIG_DIR}/${DEVRC_FILENAME}
+DEV_USER_HOME=${DEV_SHARE_DIR}/home
+
+# step 2: process command (each command can have its own options)
+
+case "${CMD}" in
+init )
+    init_cmd
+    require_init
+    build_cmd
+    ;;
+build )
+    require_init
+    build_cmd
+    ;;
+run )
+    require_init
+    run_cmd "${@}"
+    ;;
+ssh-key )
+    require_init
+    ssh_key_cmd ${*}
+    ;;
+config )
+    require_init
+    log_info "contents of ${DEVRC}"
+    cat ${DEVRC}
+    ;;
+* )
+    usage_err "unrecognized command: ${CMD}"
+    ;;
+esac

@@ -1,0 +1,7 @@
+# ignore everything except localdev.Dockerfile.
+# we should be mounting this root dir to an instance
+# and ignoring all the files here will speed up builds.
+.*/**
+*/**
+!dev.Dockerfile
+

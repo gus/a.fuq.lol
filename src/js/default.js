@@ -32,9 +32,10 @@ but ... in case that's too much work right now, here are the current shortcuts:
 | Save document            | \`Alt+s\`|
 | New document             | \`Alt+n\`|
 | Open document            | \`Alt+o\`|
+| About Fuq Docs           | \`Alt+Shift+?\`|
 
-Try it now! Type \`Alt+n\` to start a new document. Don't forget to save it
-\`Alt+s\`!
+Try it now! Type \`Alt+n\` to start a new document. Make sure to set a title
+or auto-save won't work.
 
 ## Markdown Support
 

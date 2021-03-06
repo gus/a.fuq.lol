@@ -18,7 +18,7 @@ one.
 If you need an app where you can share a document, **do not use this app**.
 There are some ideas in the works to share the content of a document, but ...
 you will NEVER be able to live-edit a specific note with anyone else. I fully
-expect to eat my words, here.
+expect to eat my words here.
 
 Almost everything is supported via the keyboard. You can't do anything with
 your mouse except choose a document to open and even that should stop soon,
@@ -64,24 +64,25 @@ Okay, but _"What about images?"_. Easy, see, a not too annoying cat \`.gif\`:
 ## Asked & Answered
 
 **Q: _"Who built this?"_**
-A: I did.
+A: I did. (or type \`Alt+Shift+?\` to get the actual details)
 
 **Q: _"Why, though?"_**
-A: I just needed an easy place to store notes without loading a damn app; or editing
+A: I just needed an easy place to store notes without loading an app; or editing
 some shared document with no one who even cares; or forgetting where I put a file; or
-being tracked by who knows whom. I wanted this thing to be fast and opinionated.
+being tracked by who knows whom. I wanted Fuq Docs to be fast and opinionated.
 Success?
-
-**Q: _"Why doesn't this stupid thing auto-save?"_**
-A: IDK. It might soon. You can type \`Alt+s\` in the mean time.
 
 **Q: _"Why are nearly all shortcuts modified with \`Alt\`?"_**
 A: Basically, I didn't want to prevent common browser shortcuts from working; like
-\`Ctrl+t\` for opening a new tab. And, I wanted the modifier to be consistent. This
-might change.
+\`Ctrl+t\` for opening a new tab. And, I wanted the modifier to be consistent. _This
+might change._
 
 **Q: _"Why can't I delete any of these nonsense docs!"_** A: You will be able to soon!
 I promise!
+
+**Q: _"Why is the domain \`a.fuq.lol\`?"_** A: Naming things is hard.
+
+**Q: _"How do you pronounce 'fuq'?"_** A: Umm ... your choice.
 
 ---
 

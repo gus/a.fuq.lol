@@ -37,4 +37,5 @@ const Shortcuts = {
     "Escape|false|false|false|false": { "event": Events.UserToggle, "scope": "prompt" },
     "Slash|false|true|false|false": { "event": Events.UserToggle, "scope": "prompt", "key": "help" },
     "Slash|false|false|true|false": { "event": Events.UserToggle, "scope": "prompt", "key": "help" },
+    "Slash|true|false|true|false": { "event": Events.UserToggle, "scope": "prompt", "key": "about" },
 };

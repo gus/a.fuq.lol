@@ -16,6 +16,7 @@ marked.setOptions({
 
 const PromptClassMap = {
     "help": ScratchComponent,
+    "about": ScratchComponent,
     "title": ScratchTitlePrompt,
     "browser": ScratchBrowserPrompt,
 }

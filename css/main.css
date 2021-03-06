@@ -142,7 +142,7 @@ body {
 
 .reader {
     font-family: 'Newsreader', serif;
-    font-size: 110%;
+    font-size: 1.10rem;
     margin: auto;
     width: 75%;
     padding-bottom: 1.5rem;
@@ -156,6 +156,15 @@ body {
     max-width: 100%;
 }
 
+.reader code {
+    font-family: 'Fira Code', monospace;
+}
+
+.reader :not(pre) code, .reader :not(tbody) code {
+    font-size: 0.80rem;
+    padding: 0.1rem 0.3rem;
+}
+
 .reader pre {
     padding: 1rem;
     border-radius: 0.5rem;
@@ -164,7 +173,7 @@ body {
 
 .reader pre code {
     font-family: 'Fira Code', monospace;
-    font-size: 85%;
+    font-size: 0.75rem;
 }
 
 .reader blockquote {
@@ -192,6 +201,7 @@ body {
 
 .reader table tbody {
     font-family: 'Fira Code', monospace;
+    font-size: 0.85rem;
 }
 
 .editor {
@@ -222,6 +232,11 @@ body {
     box-shadow: 0px 1px 4px black;
 }
 
+.prompt p {
+    text-align: justify;
+    font-family: 'Roboto Condensed', sans-serif;
+}
+
 .prompt.table > div {
     padding: 0.25rem 0;
 }
@@ -239,7 +254,12 @@ body {
     margin-left: 0.25rem;
 }
 
+.prompt .table .tr .title {
+    font-family: 'Roboto Condensed', sans-serif;
+}
+
 .prompt .table .tr .date {
+    font-family: 'Roboto Condensed', sans-serif;
     font-size: 75%;
     padding-left: 1.5em;
 }
@@ -314,6 +334,12 @@ i.far.alert, i.fab.alert, i.fas.alert {
     border-color: #484a4b;
 }
 
+.dark .reader :not(pre) code {
+    background-color: #252833;
+    color: aquamarine;
+    border-radius: 0.25rem;
+}
+
 .dark .reader pre {
     background-color: #252833;
 }
@@ -346,6 +372,19 @@ i.far.alert, i.fab.alert, i.fas.alert {
 
 .dark .prompt .tr.clickable:hover {
     border-bottom: 1px solid pink;
+}
+
+.dark .prompt hr {
+    border: none;
+    border-top: 1px solid darkslategray;
+}
+
+.dark .prompt a, .dark .prompt a:visited {
+    color: palevioletred;
+}
+
+.dark .prompt a, .dark .prompt a:hover {
+    color: pink;
 }
 
 .dark .shortcut {

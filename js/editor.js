@@ -1,8 +1,3 @@
-// TODO support local storage
-// TODO storage: support compression streams
-// TODO support basic editing keystrokes
-// TODO maybe support snippets
-
 const UUIDRe = /^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/;
 
 function uuidv4() {
@@ -20,12 +15,13 @@ function ymd(d) {
 }
 
 /*
- * ScratchDocument
- * id: uuid - an internal id for this document
- * created_at: int - milli-seconds since epoch (UTC) when this document was created
- * updated_at: int - milli-seconds since epoch (UTC) when this document was last updated
- * title: string - the document's title
- * content: string - the document's contents
+ * struct ScratchDocument {
+ *   id: uuid - an internal id for this document
+ *   created_at: int - milli-seconds since epoch (UTC) when this document was created
+ *   updated_at: int - milli-seconds since epoch (UTC) when this document was last updated
+ *   title: string - the document's title
+ *   content: string - the document's contents
+ * }
  */
 
 function marshalDocument(doc) {
@@ -115,14 +111,10 @@ class ScratchDB extends EventTarget {
         if (!this.manifest.includes(docKey)) {
             this.manifest.push(docKey);
             this.saveManifest();
-            this.dispatchEvent(new CustomEvent("new-document", {
-                detail: { key: docKey, "doc": doc }
-            }));
-        } else {
-            this.dispatchEvent(new CustomEvent("save-document", {
-                detail: { key: docKey, "doc": doc }
-            }));
         }
+        this.dispatchEvent(new CustomEvent(Events.DocumentSave, {
+            detail: { key: docKey, "doc": doc }
+        }));
     }
 }
 
@@ -146,7 +138,7 @@ class ScratchDocument extends EventTarget {
 
     set document(doc) {
         this._doc = doc;
-        this.dispatchEvent(new CustomEvent("document-change"))
+        this.dispatchEvent(new CustomEvent(Events.DocumentChange))
     }
 
     get id() {
@@ -168,7 +160,7 @@ class ScratchDocument extends EventTarget {
     set title(str) {
         if (this.isOpen()) {
             this._doc.title = str;
-            this.dispatchEvent(new CustomEvent("title-change"))
+            this.dispatchEvent(new CustomEvent(Events.DocumentTitleChange))
         }
     }
 
@@ -183,7 +175,7 @@ class ScratchDocument extends EventTarget {
     set content(str) {
         if (this.isOpen()) {
             this._doc.content = str;
-            this.dispatchEvent(new CustomEvent("content-change"))
+            this.dispatchEvent(new CustomEvent(Events.DocumentContentChange))
         }
     }
 }
@@ -195,9 +187,9 @@ class ScratchComponent extends EventTarget {
         this.doc = doc;
 
         let self = this;
-        this.doc.addEventListener("document-change", ev => { self.handleDocumentChange(ev) })
-        this.doc.addEventListener("content-change", ev => { self.handleContentChange(ev) })
-        this.doc.addEventListener("title-change", ev => { self.handleTitleChange(ev) })
+        this.doc.addEventListener(Events.DocumentChange, ev => { self.handleDocumentChange(ev) })
+        this.doc.addEventListener(Events.DocumentContentChange, ev => { self.handleContentChange(ev) })
+        this.doc.addEventListener(Events.DocumentTitleChange, ev => { self.handleTitleChange(ev) })
     }
 
     handleDocumentChange(ev) {
@@ -360,7 +352,7 @@ class ScratchTitlePrompt extends ScratchComponent {
         this.$title = $panel.querySelector("input");
 
         let self = this;
-        this.doc.addEventListener("document-change", ev => { self.handleDocumentChange(ev) })
+        this.doc.addEventListener(Events.DocumentChange, ev => { self.handleDocumentChange(ev) })
         this.$title.addEventListener("input", ev => { self.handleInputChange(ev) })
         this.$title.addEventListener("keypress", ev => { self.handleEnterKey(ev) })
     }
@@ -375,7 +367,7 @@ class ScratchTitlePrompt extends ScratchComponent {
 
     handleEnterKey(ev) {
         if (ev.code === "Enter") {
-            document.dispatchEvent(new CustomEvent("x-toggle", { detail: { "scope": "prompt" } }))
+            document.dispatchEvent(new CustomEvent(Events.UserToggle, { detail: { "scope": "prompt" } }))
         }
     }
 
@@ -458,8 +450,8 @@ class StatusBar extends ScratchComponent {
         this.$saveStatus = $panel.querySelector("i.save");
 
         let self = this;
-        this.db.addEventListener("new-document", ev => { self.handleContentChange(ev) })
-        this.db.addEventListener("save-document", ev => { self.handleSaveDocument(ev) })
+        this.db.addEventListener(Events.DocumentNew, ev => { self.handleContentChange(ev) })
+        this.db.addEventListener(Events.DocumentSave, ev => { self.handleSaveDocument(ev) })
     }
 
     message(level, msg) {
@@ -479,6 +471,7 @@ class StatusBar extends ScratchComponent {
     }
 
     handleSaveDocument(ev) {
+        console.log("what")
         this.$saveStatus.classList.remove("ALERT");
     }
 }

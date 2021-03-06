@@ -5,9 +5,9 @@ const DefaultDocument = `
 
 You have found **_Fuq Docs_**. Congratulations?
 
-Well ... now you can save notes in markdown and read/preview those rendered
+Well ... now you can edit notes in markdown and preview those rendered
 notes. These documents never leave your browser profile. There are no ads. There
-are no ad-trackers.
+are no ad-trackers. There is no data collection of any kind.
 
 You can't (currently) share your notes. This "app" gets completely out of
 your way. Every document is stored in your browser's local-storage. Only.

@@ -1,19 +1,3 @@
-marked.setOptions({
-    headerIds: false,
-    gfm: true, // ensure github-flavored-markdown
-    highlight: function (code, lang) {
-        if (!hljs.listLanguages().includes(lang)) {
-            return code;
-        }
-
-        try {
-            return hljs.highlight(lang, code).value;
-        } catch (e) {
-            return hljs.highlightAuto(code).value;
-        }
-    }
-});
-
 const PromptClassMap = {
     "help": ScratchComponent,
     "about": ScratchComponent,

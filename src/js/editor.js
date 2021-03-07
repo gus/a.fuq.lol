@@ -113,6 +113,7 @@ class ScratchDB extends EventTarget {
     }
 }
 
+// moved class attrs here because safari hates me and i haven't installed babel yet
 ScratchDB.Namespace = "scratchmark"
 ScratchDB.ManifestKey = [ScratchDB.Namespace, "manifest"].join(".")
 ScratchDB.LastSavedKey = [ScratchDB.Namespace, "lastSaved"].join(".")

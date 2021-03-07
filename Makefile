@@ -1,4 +1,4 @@
-TIMESTAMP != date +%s
+TIMESTAMP := $(shell date +%s)
 
 SRC_DIR := src
 DIST_DIR := dist
@@ -46,13 +46,12 @@ build: $(DIST_DIR) $(DIST_DIR)/index.html $(EXTRA_FILES_DIST)
 
 .PHONY: clean
 
-clean:
-	rm -f $(DIST_DIR)/*
+clean: $(DIST_DIR)
+	rm $(DIST_DIR)/*
 
 .PHONY: server
 
-server:
-	@mkdir -p $(DIST_DIR)
+server: $(DIST_DIR)
 	@echo "# url: http://localhost:3456/"
 	cd $(DIST_DIR) && pwd && python3 -m http.server 3456
 

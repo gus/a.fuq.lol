@@ -16,15 +16,15 @@ use. If you have all the tools installed locally, you won't need the docker imag
 To get started, ensure you have docker and direnv installed and run the following:
 
 ```sh
-$ direnv allow .
+$ direnv allow .    # ensures bin/ is added to your $PATH
 $ dev init
 $ dev build
 ```
 
 If you are using VSCode, you can now attach to the container remotely; though this
-entirely unnecessary. `dev` mounts the repo's dir; any changes you make on your host or
-in the container are synced. Otherwise, or regardless, you can open a terminal and
-attach to the container:
+is entirely unnecessary. `dev` mounts the repo's dir; any changes you make on your
+host or in the container are synced. Otherwise, or regardless, you can open a terminal
+and attach to the container:
 
 ```sh
 $ dev run
@@ -32,7 +32,7 @@ $ dev run
 dev@dev:/workspace/dev$ 
 ```
 
-_You can `dev run` in as many terminals as you like; subsequent calls will `exec` into
+_You can run `dev run` in as many terminals as you like; subsequent calls will `exec` into
 the container._
 
 Next, make the distribution. This distribution is the same regardless of running locally

@@ -56,11 +56,6 @@ function unmarshalDocument(str) {
 }
 
 class ScratchDB extends EventTarget {
-    static Namespace = "scratchmark"
-    static ManifestKey = [ScratchDB.Namespace, "manifest"].join(".")
-    static LastSavedKey = [ScratchDB.Namespace, "lastSaved"].join(".")
-    static DocPrefix = [ScratchDB.Namespace, "docs"].join(".")
-
     constructor() {
         super();
         const manifestStr = localStorage.getItem(ScratchDB.ManifestKey);
@@ -117,6 +112,11 @@ class ScratchDB extends EventTarget {
         }));
     }
 }
+
+ScratchDB.Namespace = "scratchmark"
+ScratchDB.ManifestKey = [ScratchDB.Namespace, "manifest"].join(".")
+ScratchDB.LastSavedKey = [ScratchDB.Namespace, "lastSaved"].join(".")
+ScratchDB.DocPrefix = [ScratchDB.Namespace, "docs"].join(".")
 
 /**
  * ScratchDocument is a wrapper around the currently open document.

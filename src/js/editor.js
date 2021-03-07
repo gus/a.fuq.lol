@@ -405,6 +405,7 @@ class ScratchConfirmDeletePrompt extends ScratchComponent {
         let $cancel = $panel.querySelector("button.cancel");
 
         $confirm.addEventListener("click", ev => {
+            document.dispatchEvent(new CustomEvent(Events.UserToggle, { detail: { "scope": "prompt" } }));
             document.dispatchEvent(new CustomEvent(Events.UserDeleteDocument));
         })
         $cancel.addEventListener("click", ev => {

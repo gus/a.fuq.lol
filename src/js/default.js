@@ -31,6 +31,7 @@ but ... in case that's too much work right now, here are the current shortcuts:
 | Rename document...       | \`Alt+t\`|
 | Save document            | \`Alt+s\`|
 | New document             | \`Alt+n\`|
+| Delete document          | \`Alt+Delete\`|
 | Open document            | \`Alt+o\`|
 | About Fuq Docs           | \`Alt+Shift+?\`|
 

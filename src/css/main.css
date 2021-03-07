@@ -191,7 +191,7 @@
 }
 
 .reader .checkbox.checked {
-    color: aquamarine;
+    color: black;
 }
 
 .reader table {
@@ -282,6 +282,22 @@
     border-bottom: 1px solid black;
 }
 
+.prompt button {
+    background-color: darkgray;
+    border: 1px solid transparent;
+    color: white;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-family: 'Roboto Condensed';
+    border-radius: 0.25rem;
+    padding: 0.5rem;
+    margin-right: 1em;
+}
+
+.prompt button:hover {
+    border: 1px solid white;
+}
+
 input {
     background-color: transparent;
     border: 0;
@@ -358,7 +374,11 @@ i.far.alert, i.fab.alert, i.fas.alert {
     text-shadow: 2px 2px 3px black;
 }
 
-.darl .reader .checkbox.checked {
+.dark .reader .checkbox {
+    color: lightgray;
+}
+
+.dark .reader .checkbox.checked {
     color: aquamarine;
 }
 
@@ -399,6 +419,26 @@ i.far.alert, i.fab.alert, i.fas.alert {
 
 .dark .prompt a, .dark .prompt a:hover {
     color: pink;
+}
+
+.dark .prompt button.confirm.destructive {
+    background-color: orangered;
+    color: white;
+    border: 1px solid transparent;
+}
+
+.dark .prompt button.confirm.destructive:hover {
+    border: 1px solid white;
+}
+
+.dark .prompt button.cancel {
+    background-color: #222;
+    color: lightgray;
+    border: 1px solid transparent;
+}
+
+.dark .prompt button.cancel:hover {
+    border: 1px solid white;
 }
 
 .dark .shortcut {

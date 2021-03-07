@@ -3,6 +3,7 @@ const PromptClassMap = {
     "about": ScratchComponent,
     "title": ScratchTitlePrompt,
     "browser": ScratchBrowserPrompt,
+    "confirm-delete": ScratchConfirmDeletePrompt,
 }
 
 function main() {
@@ -50,7 +51,6 @@ function main() {
         if (curDoc.title.length === 0) {
             $statusbar.message("ALERT", "Set document title in order to save (Alt + t)");
         } else {
-            console.log("saving doc", curDoc.document)
             $statusbar.clearMessage();
             db.saveDocument(curDoc.document);
         }
@@ -63,8 +63,23 @@ function main() {
         $prompts.show("title");
     });
 
+    document.addEventListener(Events.UserDeleteDocument, ev => {
+        console.log("document delete attempted", ev)
+        db.deleteDocument(curDoc.document);
+    });
+
     curDoc.addEventListener(Events.DocumentChange, ev => {
         curDoc.empty() ? $viewer.primary() : $viewer.secondary();
+    });
+
+    db.addEventListener(Events.DocumentDelete, ev => {
+        console.log("document deleted", ev)
+        const lastDoc = db.lastSavedDocument();
+        if (lastDoc) {
+            curDoc.document = lastDoc;
+        } else {
+            document.dispatchEvent(new CustomEvent(Events.UserNewDocument));
+        }
     });
 
     curDoc.document = db.lastSavedDocument(); // try and open the last saved document

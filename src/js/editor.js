@@ -60,6 +60,8 @@ class ScratchDB extends EventTarget {
         super();
         const manifestStr = localStorage.getItem(ScratchDB.ManifestKey);
         this.manifest = manifestStr ? JSON.parse(manifestStr) : [];
+        // slow migration, delete this key
+        localStorage.removeItem(ScratchDB.LastSavedKey);
     }
 
     saveManifest() {
@@ -81,7 +83,7 @@ class ScratchDB extends EventTarget {
     }
 
     lastSavedDocument() {
-        const lastSaved = localStorage.getItem(ScratchDB.LastSavedKey);
+        const lastSaved = this.manifest[0];
         return lastSaved ? this.loadDocument(lastSaved) : null;
     }
 
@@ -101,14 +103,28 @@ class ScratchDB extends EventTarget {
         const docKey = this.key(doc);
         doc.updated_at = Date.now();
         localStorage.setItem(docKey, marshalDocument(doc));
-        localStorage.setItem(ScratchDB.LastSavedKey, docKey);
 
-        if (!this.manifest.includes(docKey)) {
-            this.manifest.push(docKey);
-            this.saveManifest();
-        }
+        this.manifest = [docKey, ...this.manifest.filter(dk => dk !== docKey)];
+        this.saveManifest();
+
         this.dispatchEvent(new CustomEvent(Events.DocumentSave, {
             detail: { key: docKey, "doc": doc }
+        }));
+    }
+
+    deleteDocument(doc) {
+        if (typeof (doc) !== "object") {
+            throw new Error("document must be an object")
+        }
+        const docKey = this.key(doc);
+        console.log("deleting doc", docKey, doc);
+        localStorage.removeItem(docKey);
+
+        this.manifest = [...this.manifest.filter(dk => dk !== docKey)];
+        this.saveManifest();
+
+        this.dispatchEvent(new CustomEvent(Events.DocumentDelete, {
+            detail: { key: docKey }
         }));
     }
 }
@@ -368,7 +384,7 @@ class ScratchTitlePrompt extends ScratchComponent {
 
     handleEnterKey(ev) {
         if (ev.code === "Enter") {
-            document.dispatchEvent(new CustomEvent(Events.UserToggle, { detail: { "scope": "prompt" } }))
+            document.dispatchEvent(new CustomEvent(Events.UserToggle, { detail: { "scope": "prompt" } }));
         }
     }
 
@@ -379,6 +395,21 @@ class ScratchTitlePrompt extends ScratchComponent {
 
     focus() {
         this.$title.focus();
+    }
+}
+
+class ScratchConfirmDeletePrompt extends ScratchComponent {
+    constructor($panel, curDoc) {
+        super($panel, curDoc);
+        let $confirm = $panel.querySelector("button.confirm");
+        let $cancel = $panel.querySelector("button.cancel");
+
+        $confirm.addEventListener("click", ev => {
+            document.dispatchEvent(new CustomEvent(Events.UserDeleteDocument));
+        })
+        $cancel.addEventListener("click", ev => {
+            document.dispatchEvent(new CustomEvent(Events.UserToggle, { detail: { "scope": "prompt" } }));
+        })
     }
 }
 
@@ -472,7 +503,6 @@ class StatusBar extends ScratchComponent {
     }
 
     handleSaveDocument(ev) {
-        console.log("what")
         this.$saveStatus.classList.remove("ALERT");
     }
 }

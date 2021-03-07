@@ -80,6 +80,7 @@
                     <span class="label">Rename...</span>
                     <span class="shortcut">Alt + t</span>
                 </div>
+                <hr>
                 <div class="tr">
                     <i class="fas fa-save"></i>
                     <span class="label">Save document</span>
@@ -97,15 +98,20 @@
                     <span class="shortcut">Alt + o</span>
                 </div>
                 <div class="tr">
+                    <i class="fas fa-trash-alt"></i>
+                    <span class="label">Delete document (current)</span>
+                    <span class="shortcut">Alt + Delete</span>
+                </div>
+                <hr>
+                <div class="tr">
                     <i class="fas fa-sad-cry"></i>
                     <span class="label">Cancel (any prompt)</span>
                     <span class="shortcut">Esc</span>
                 </div>
-                <hr>
                 <div class="tr">
                     <i class="fas fa-info-circle"></i>
                     <span class="label">About</span>
-                    <span class="shortcut">Alt+Shift+?</span>
+                    <span class="shortcut">Alt + Shift + ?</span>
                 </div>
             </div>
         </div>
@@ -115,7 +121,15 @@
             <div class="scrollable">
                 <div class="table"></div>
             </div>
-            <div style="clear: both;"></div>
+        </div>
+
+        <div data-key="confirm-delete" class="prompt" style="display: none">
+            <strong>Delete Document</strong>
+            <p>
+                You are about to delete the current document. This is permanent.
+            </p>
+            <button class="confirm destructive">Confirm</button>
+            <button class="cancel">Cancel</button>
         </div>
 
         <div id='editor' class="editor" style="display: none">

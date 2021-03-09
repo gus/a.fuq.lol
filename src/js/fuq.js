@@ -55,6 +55,14 @@ function unmarshalDocument(str) {
     }
 }
 
+const FuqDBNamespace = "fuqdocs";
+const FuqDBManifestKey = [FuqDBNamespace, "manifest"].join(".");
+const FuqDBDocPrefix = [FuqDBNamespace, "docs"].join(".");
+
+function documentKey(doc) {
+    return [FuqDBDocPrefix, doc.id].join("/");
+}
+
 class FuqDB extends EventTarget {
     constructor() {
         super();
@@ -62,16 +70,12 @@ class FuqDB extends EventTarget {
     }
 
     loadManifest() {
-        const manifestStr = localStorage.getItem(FuqDB.ManifestKey);
+        const manifestStr = localStorage.getItem(FuqDBManifestKey);
         this.manifest = manifestStr ? JSON.parse(manifestStr) : [];
     }
 
     saveManifest() {
-        localStorage.setItem(FuqDB.ManifestKey, JSON.stringify(this.manifest));
-    }
-
-    documentKey(doc) {
-        return [FuqDB.DocPrefix, doc.id].join("/")
+        localStorage.setItem(FuqDBManifestKey, JSON.stringify(this.manifest));
     }
 
     newDocument() {
@@ -102,7 +106,7 @@ class FuqDB extends EventTarget {
             throw new Error("document must be an object")
         }
 
-        const docKey = this.documentKey(doc);
+        const docKey = documentKey(doc);
         doc.updated_at = Date.now();
         localStorage.setItem(docKey, marshalDocument(doc));
 
@@ -118,23 +122,20 @@ class FuqDB extends EventTarget {
         if (typeof (doc) !== "object") {
             throw new Error("document must be an object")
         }
-        const docKey = this.documentKey(doc);
-        console.log("deleting doc", docKey, doc);
-        localStorage.removeItem(docKey);
+        const docKey = documentKey(doc);
+        console.debug("fuqdocs/db: deleting doc", docKey, doc);
 
+        // update the manifest before we remove the doc
         this.manifest = [...this.manifest.filter(dk => dk !== docKey)];
         this.saveManifest();
+
+        localStorage.removeItem(docKey);
 
         this.dispatchEvent(new CustomEvent(Events.DocumentDelete, {
             detail: { key: docKey }
         }));
     }
 }
-
-// moved class attrs here because safari hates me and i haven't installed babel yet
-FuqDB.Namespace = "fuqdocs";
-FuqDB.ManifestKey = [FuqDB.Namespace, "manifest"].join(".");
-FuqDB.DocPrefix = [FuqDB.Namespace, "docs"].join(".");
 
 /**
  * CurrentDocument is a wrapper around the currently open document. The
@@ -149,6 +150,10 @@ class CurrentDocument extends EventTarget {
 
     isOpen() {
         return !!this._doc
+    }
+
+    get key() {
+        return documentKey(this._doc);
     }
 
     get document() {
@@ -211,19 +216,30 @@ class FuqStorageObserver {
     }
 
     handleStorageChange(ev) {
-        if (ev.key.startsWith(FuqDB.Namespace)) {
-            if (ev.key === FuqDB.ManifestKey) {
-                console.debug("fuqdocs/storage: manifest updated elsewhere");
+        if (ev.key.startsWith(FuqDBNamespace)) {
+            if (ev.key === FuqDBManifestKey) {
+                console.debug("fuqdocs/storage-observer: manifest updated elsewhere");
                 this.db.loadManifest();
-            } else if (ev.key.startsWith(FuqDB.DocPrefix)) {
-                const doc = this.db.loadDocument(ev.key);
-                if (doc.id === this.curDoc.document.id) {
-                    console.debug("fuqdocs/storage: current document updated elsewhere");
-                    this.curDoc.document = doc; // re-open the current doc
-                } else {
-                    console.debug(`fuqdocs/storage: document ${ev.key} updated elsewhere`);
-                }
+            } else if (ev.key.startsWith(FuqDBDocPrefix)) {
+                this.handleDocumentChange(ev);
             }
+        }
+    }
+
+    handleDocumentChange(ev) {
+        const docKey = ev.key;
+        if (ev.newValue == null) {
+            console.debug("fuqdocs/storage-observer: current document deleted elsewhere");
+            this.db.dispatchEvent(new CustomEvent(Events.DocumentDelete, {
+                detail: { key: docKey }
+            }));
+        } else if (docKey === this.curDoc.key) {
+            console.debug("fuqdocs/storage-observer: current document updated elsewhere");
+            // re-open the current doc
+            this.curDoc.document = this.db.loadDocument(docKey);
+        } else {
+            // nothing to do
+            console.debug(`fuqdocs/storage: document ${docKey} updated elsewhere`);
         }
     }
 }
@@ -453,6 +469,7 @@ class FuqDocumentBrowserPrompt extends FuqComponent {
         this.$table = this.$panel.querySelector(".table");
 
         let self = this;
+        this.db.addEventListener(Events.DocumentDelete, ev => { self.handleFilter(ev) })
         this.$filter.addEventListener("input", ev => { self.handleFilter(ev) })
         this.$table.addEventListener("click", ev => { self.handleClick(ev) })
     }

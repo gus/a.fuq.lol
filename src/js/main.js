@@ -67,7 +67,6 @@ function main() {
     });
 
     document.addEventListener(Events.UserDeleteDocument, ev => {
-        console.log("document delete attempted", ev)
         db.deleteDocument(curDoc.document);
     });
 
@@ -76,12 +75,13 @@ function main() {
     });
 
     db.addEventListener(Events.DocumentDelete, ev => {
-        console.log("document deleted", ev)
-        const lastDoc = db.lastSavedDocument();
-        if (lastDoc) {
-            curDoc.document = lastDoc;
-        } else {
-            document.dispatchEvent(new CustomEvent(Events.UserNewDocument));
+        if (ev.detail.key === curDoc.key) {
+            const lastDoc = db.lastSavedDocument();
+            if (lastDoc) {
+                curDoc.document = lastDoc;
+            } else {
+                document.dispatchEvent(new CustomEvent(Events.UserNewDocument));
+            }
         }
     });
 

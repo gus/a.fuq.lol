@@ -7,6 +7,8 @@ const PromptClassMap = {
 }
 
 function main() {
+    runMigrations(Migrations);
+
     const db = new DocumentDB();
     const curDoc = new CurrentDocument();
 
@@ -88,6 +90,7 @@ function main() {
         curDoc.empty() ? $viewer.primary() : $viewer.secondary();
     } else {
         // probably a new session; build the default doc and stuff
+        console.debug("fuqdocs: creating hello,world doc");
         let defDoc = db.newDocument();
         defDoc.content = DefaultDocument;
         defDoc.title = "Hello, World!";

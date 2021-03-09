@@ -15,7 +15,7 @@ function ymd(d) {
 }
 
 /*
- * struct ScratchDocument {
+ * struct Document {
  *   id: uuid - an internal id for this document
  *   created_at: int - milli-seconds since epoch (UTC) when this document was created
  *   updated_at: int - milli-seconds since epoch (UTC) when this document was last updated
@@ -60,8 +60,6 @@ class DocumentDB extends EventTarget {
         super();
         const manifestStr = localStorage.getItem(DocumentDB.ManifestKey);
         this.manifest = manifestStr ? JSON.parse(manifestStr) : [];
-        // slow migration, delete this key
-        localStorage.removeItem(DocumentDB.LastSavedKey);
     }
 
     saveManifest() {
@@ -130,10 +128,10 @@ class DocumentDB extends EventTarget {
 }
 
 // moved class attrs here because safari hates me and i haven't installed babel yet
-DocumentDB.Namespace = "scratchmark"
-DocumentDB.ManifestKey = [DocumentDB.Namespace, "manifest"].join(".")
-DocumentDB.LastSavedKey = [DocumentDB.Namespace, "lastSaved"].join(".")
-DocumentDB.DocPrefix = [DocumentDB.Namespace, "docs"].join(".")
+DocumentDB.Namespace = "fuqdocs";
+DocumentDB.ManifestKey = [DocumentDB.Namespace, "manifest"].join(".");
+DocumentDB.LastSavedKey = [DocumentDB.Namespace, "lastSaved"].join(".");
+DocumentDB.DocPrefix = [DocumentDB.Namespace, "docs"].join(".");
 
 /**
  * CurrentDocument is a wrapper around the currently open document. The

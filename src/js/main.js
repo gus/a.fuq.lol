@@ -88,7 +88,6 @@ function main() {
         curDoc.empty() ? $viewer.primary() : $viewer.secondary();
     } else {
         // probably a new session; build the default doc and stuff
-        // TODO: what if they deleted all of their docs (which they can't do yet)
         let defDoc = db.newDocument();
         defDoc.content = DefaultDocument;
         defDoc.title = "Hello, World!";

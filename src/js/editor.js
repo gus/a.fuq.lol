@@ -55,21 +55,21 @@ function unmarshalDocument(str) {
     }
 }
 
-class ScratchDB extends EventTarget {
+class DocumentDB extends EventTarget {
     constructor() {
         super();
-        const manifestStr = localStorage.getItem(ScratchDB.ManifestKey);
+        const manifestStr = localStorage.getItem(DocumentDB.ManifestKey);
         this.manifest = manifestStr ? JSON.parse(manifestStr) : [];
         // slow migration, delete this key
-        localStorage.removeItem(ScratchDB.LastSavedKey);
+        localStorage.removeItem(DocumentDB.LastSavedKey);
     }
 
     saveManifest() {
-        localStorage.setItem(ScratchDB.ManifestKey, JSON.stringify(this.manifest));
+        localStorage.setItem(DocumentDB.ManifestKey, JSON.stringify(this.manifest));
     }
 
     key(doc) {
-        return [ScratchDB.DocPrefix, doc.id].join("/")
+        return [DocumentDB.DocPrefix, doc.id].join("/")
     }
 
     newDocument() {
@@ -130,16 +130,17 @@ class ScratchDB extends EventTarget {
 }
 
 // moved class attrs here because safari hates me and i haven't installed babel yet
-ScratchDB.Namespace = "scratchmark"
-ScratchDB.ManifestKey = [ScratchDB.Namespace, "manifest"].join(".")
-ScratchDB.LastSavedKey = [ScratchDB.Namespace, "lastSaved"].join(".")
-ScratchDB.DocPrefix = [ScratchDB.Namespace, "docs"].join(".")
+DocumentDB.Namespace = "scratchmark"
+DocumentDB.ManifestKey = [DocumentDB.Namespace, "manifest"].join(".")
+DocumentDB.LastSavedKey = [DocumentDB.Namespace, "lastSaved"].join(".")
+DocumentDB.DocPrefix = [DocumentDB.Namespace, "docs"].join(".")
 
 /**
- * ScratchDocument is a wrapper around the currently open document.
- * ...
+ * CurrentDocument is a wrapper around the currently open document. The
+ * underlying document can change, but any users of this CurrentDocument
+ * will not need to get any new object to use. ...
  */
-class ScratchDocument extends EventTarget {
+class CurrentDocument extends EventTarget {
     constructor(doc) {
         super();
         this._doc = doc;
@@ -197,7 +198,7 @@ class ScratchDocument extends EventTarget {
     }
 }
 
-class ScratchComponent extends EventTarget {
+class FuqComponent extends EventTarget {
     constructor($panel, doc) {
         super();
         this.$panel = $panel;
@@ -246,7 +247,7 @@ class ScratchComponent extends EventTarget {
     }
 }
 
-class ScratchEditor extends ScratchComponent {
+class FuqEditor extends FuqComponent {
     constructor($panel, curDoc) {
         super($panel, curDoc);
         this.doc = curDoc;
@@ -269,7 +270,7 @@ class ScratchEditor extends ScratchComponent {
     }
 }
 
-class ScratchReader extends ScratchComponent {
+class FuqReader extends FuqComponent {
     constructor($panel, curDoc) {
         super($panel, curDoc);
     }
@@ -283,7 +284,7 @@ class ScratchReader extends ScratchComponent {
     }
 }
 
-class BinaryToggler {
+class FuqComponentSwapper {
     // one-and-only-one component is in view at a time
     constructor(primaryView, secondaryView) {
         this.primaryView = primaryView;
@@ -313,8 +314,8 @@ class BinaryToggler {
     }
 }
 
-class MultiComponentToggler {
-    // only one component can be in view at time, though nothing has to be in view
+class FuqComponentToggler {
+    // only one component can be in view at time, though none have to be in view
     constructor() {
         this.components = {};
         this.activeKey = null;
@@ -362,7 +363,7 @@ class MultiComponentToggler {
     }
 }
 
-class ScratchTitlePrompt extends ScratchComponent {
+class FuqTitlePrompt extends FuqComponent {
     constructor($panel, curDoc) {
         super($panel, curDoc);
         this.doc = curDoc;
@@ -398,7 +399,7 @@ class ScratchTitlePrompt extends ScratchComponent {
     }
 }
 
-class ScratchConfirmDeletePrompt extends ScratchComponent {
+class FuqConfirmDeletePrompt extends FuqComponent {
     constructor($panel, curDoc) {
         super($panel, curDoc);
         let $confirm = $panel.querySelector("button.confirm");
@@ -414,7 +415,7 @@ class ScratchConfirmDeletePrompt extends ScratchComponent {
     }
 }
 
-class ScratchBrowserPrompt extends ScratchComponent {
+class FuqDocumentBrowserPrompt extends FuqComponent {
     constructor($panel, curDoc, db) {
         super($panel, curDoc);
         this.db = db;
@@ -475,7 +476,7 @@ class ScratchBrowserPrompt extends ScratchComponent {
     }
 }
 
-class StatusBar extends ScratchComponent {
+class FuqStatusBar extends FuqComponent {
     constructor($panel, curDoc, db) {
         super($panel, curDoc);
         this.db = db;

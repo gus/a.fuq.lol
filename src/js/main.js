@@ -1,26 +1,26 @@
 const PromptClassMap = {
-    "help": ScratchComponent,
-    "about": ScratchComponent,
-    "title": ScratchTitlePrompt,
-    "browser": ScratchBrowserPrompt,
-    "confirm-delete": ScratchConfirmDeletePrompt,
+    "help": FuqComponent,
+    "about": FuqComponent,
+    "title": FuqTitlePrompt,
+    "browser": FuqDocumentBrowserPrompt,
+    "confirm-delete": FuqConfirmDeletePrompt,
 }
 
 function main() {
-    const db = new ScratchDB();
-    const curDoc = new ScratchDocument();
+    const db = new DocumentDB();
+    const curDoc = new CurrentDocument();
 
-    const $viewer = new BinaryToggler(
-        new ScratchEditor(document.querySelector("#editor"), curDoc),
-        new ScratchReader(document.querySelector("#reader"), curDoc));
+    const $viewer = new FuqComponentSwapper(
+        new FuqEditor(document.querySelector("#editor"), curDoc),
+        new FuqReader(document.querySelector("#reader"), curDoc));
 
-    const $prompts = new MultiComponentToggler();
+    const $prompts = new FuqComponentToggler();
     document.querySelectorAll(".prompt").forEach($prompt => {
         const key = $prompt.dataset.key;
         $prompts.register(key, new PromptClassMap[key]($prompt, curDoc, db));
     })
 
-    const $statusbar = new StatusBar(document.querySelector("#statusbar"), curDoc, db);
+    const $statusbar = new FuqStatusBar(document.querySelector("#statusbar"), curDoc, db);
 
     // shortcut router
     document.addEventListener("keydown", ev => {

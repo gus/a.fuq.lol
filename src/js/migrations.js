@@ -7,7 +7,7 @@ function migrationRemoveLastSavedKey() {
 function migrationPortOldNamespaceDocs() {
     const oldNamespaceRE = /^scratchmark\./;
     const renameKeyFn = (oldKey) => {
-        return oldKey.replace(oldNamespaceRE, DocumentDB.Namespace + ".");
+        return oldKey.replace(oldNamespaceRE, FuqDB.Namespace + ".");
     };
     const migrateManifestFn = (manifestStr) => {
         const oldManifest = manifestStr ? JSON.parse(manifestStr) : [];

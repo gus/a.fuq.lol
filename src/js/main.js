@@ -9,8 +9,9 @@ const PromptClassMap = {
 function main() {
     runMigrations(Migrations);
 
-    const db = new DocumentDB();
+    const db = new FuqDB();
     const curDoc = new CurrentDocument();
+    const storageObs = new FuqStorageObserver(curDoc, db);
 
     const $viewer = new FuqComponentSwapper(
         new FuqEditor(document.querySelector("#editor"), curDoc),

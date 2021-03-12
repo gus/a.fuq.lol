@@ -1,0 +1,130 @@
+/**
+ * Layout: common across all themes, though nothing related to .reader should
+ * go here except for container related sizing/placement. We are not adjusting
+ * anything related to display, only positioning and scaling; making things
+ * fit consistently.
+ * 
+ * Font-sizes, font-faces, colors, padding (with some exceptions), belong in
+ * themes.
+ */
+
+ body {
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.reader img {
+    max-width: 100%;
+}
+
+.prompt {
+    display: block;
+    position: fixed;
+    width: 50%;
+    min-width: 10rem;
+    top:0;
+    left: 50%;
+    transform: translate(-50%, 0);
+    max-height: 50%;
+    overflow-y: auto;
+}
+
+.prompt .table .tr {
+    display: block;
+    display: flex;
+    flex-direction: row;
+    padding: 0.25rem 0;
+    align-items: center;
+}
+
+.prompt .table .tr span {
+    display: inline-flex;
+    align-items: center;
+}
+
+.prompt .table .tr .title {
+    cursor: pointer;
+}
+
+.prompt .table .tr .label {
+    flex-grow: 1;
+}
+
+.prompt .table .tr .date {
+    white-space: nowrap;
+}
+
+.prompt .table .tr > i:first-child {
+    display: block;
+    min-width: 3rem;
+}
+
+.editor {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.editor textarea {
+    display: block;
+    flex-grow: 1;
+    padding: 0.5rem 0.5rem 2.5rem 0.5rem ;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    resize: none;
+}
+
+.editor .tray {
+    display: block;
+    float: left;
+}
+
+.editor .tray .group {
+    display: flex;
+    flex-direction: row;
+    padding: 1rem 0;
+}
+
+.editor .tray label {
+    display: block;
+    float: left;
+    width: auto;
+    text-transform: uppercase;
+    margin-right: 0.5rem;
+    padding-top: 0.2rem;
+}
+
+.editor .tray input {
+    display: block;
+    float: left;
+    flex-grow: 1;
+    resize: none;
+}
+
+#statusbar {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+.status {
+    padding: 0.5rem 0.5rem;
+    display: flex;
+}
+
+.status .section {
+    flex-grow: 1;
+    display: block;
+    align-items: center;
+}
+
+.status .section.right {
+    text-align: right;
+}

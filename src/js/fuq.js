@@ -56,6 +56,7 @@ function unmarshalDocument(str) {
 }
 
 const FuqDBNamespace = "fuqdocs";
+const FuqDBThemeKey = [FuqDBNamespace, "theme"].join(".");
 const FuqDBManifestKey = [FuqDBNamespace, "manifest"].join(".");
 const FuqDBDocPrefix = [FuqDBNamespace, "docs"].join(".");
 
@@ -69,13 +70,25 @@ class FuqDB extends EventTarget {
         this.loadManifest();
     }
 
+    load(key) {
+        return localStorage.getItem(key);
+    }
+
+    save(key, str) {
+        localStorage.setItem(key, str);
+    }
+
+    remove(key) {
+        localStorage.removeItem(key);
+    }
+
     loadManifest() {
-        const manifestStr = localStorage.getItem(FuqDBManifestKey);
+        const manifestStr = this.load(FuqDBManifestKey);
         this.manifest = manifestStr ? JSON.parse(manifestStr) : [];
     }
 
     saveManifest() {
-        localStorage.setItem(FuqDBManifestKey, JSON.stringify(this.manifest));
+        this.save(FuqDBManifestKey, JSON.stringify(this.manifest));
     }
 
     newDocument() {
@@ -88,17 +101,17 @@ class FuqDB extends EventTarget {
         };
     }
 
-    lastSavedDocument() {
-        const lastSaved = this.manifest[0];
-        return lastSaved ? this.loadDocument(lastSaved) : null;
-    }
-
     loadDocument(docKey) {
-        const docStr = localStorage.getItem(docKey);
+        const docStr = this.load(docKey);
         if (!docStr) {
             return null;
         }
         return unmarshalDocument(docStr);
+    }
+
+    lastSavedDocument() {
+        const lastSaved = this.manifest[0];
+        return lastSaved ? this.loadDocument(lastSaved) : null;
     }
 
     saveDocument(doc) {
@@ -108,7 +121,7 @@ class FuqDB extends EventTarget {
 
         const docKey = documentKey(doc);
         doc.updated_at = Date.now();
-        localStorage.setItem(docKey, marshalDocument(doc));
+        this.save(docKey, marshalDocument(doc));
 
         this.manifest = [docKey, ...this.manifest.filter(dk => dk !== docKey)];
         this.saveManifest();
@@ -129,7 +142,7 @@ class FuqDB extends EventTarget {
         this.manifest = [...this.manifest.filter(dk => dk !== docKey)];
         this.saveManifest();
 
-        localStorage.removeItem(docKey);
+        this.remove(docKey);
 
         this.dispatchEvent(new CustomEvent(Events.DocumentDelete, {
             detail: { key: docKey }
@@ -222,6 +235,11 @@ class FuqStorageObserver {
                 this.db.loadManifest();
             } else if (ev.key.startsWith(FuqDBDocPrefix)) {
                 this.handleDocumentChange(ev);
+            } else if (ev.key === FuqDBThemeKey) {
+                console.debug("fuqdocs/storage-observer: theme changed");
+                let $html = document.querySelector("html");
+                $html.classList.remove(ev.oldValue);
+                $html.classList.add(ev.newValue);
             }
         }
     }

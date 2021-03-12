@@ -11,6 +11,8 @@
                 your browser's own local-storage for managing
                 all of your documents. No ads, no trackers, no nonsense.">
 
+    <meta name="color-scheme" content="dark light">
+
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
@@ -38,7 +40,7 @@
     <script src="https://kit.fontawesome.com/b4b0919dd0.js" crossorigin="anonymous"></script>
 </head>
 
-<body class="dark">
+<body class="">
     <div class="container">
         <div data-key="title" class="prompt" style="display: none">
             <label>Title</label>
@@ -104,6 +106,12 @@
                 </div>
                 <hr>
                 <div class="tr">
+                    <i class="fas fa-adjust"></i>
+                    <span class="label">Toggle light/dark mode</span>
+                    <span class="shortcut">Ctrl + Alt + t</span>
+                </div>
+                <hr>
+                <div class="tr">
                     <i class="fas fa-sad-cry"></i>
                     <span class="label">Cancel (any prompt)</span>
                     <span class="shortcut">Esc</span>
@@ -128,7 +136,7 @@
             <p>
                 You are about to delete the current document. This is permanent.
             </p>
-            <button class="confirm destructive">Confirm</button>
+            <button class="confirm alert">Confirm</button>
             <button class="cancel">Cancel</button>
         </div>
 

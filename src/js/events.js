@@ -12,6 +12,7 @@ const Events = {
     UserNewDocument: "fuq-user-new-document",
     UserDeleteDocument: "fuq-user-delete-document",
     UserToggle: "fuq-user-toggle",
+    UserToggleTheme: "fuq-user-toggle-theme",
 }
 
 function keycombo(ev) {
@@ -30,7 +31,7 @@ const Shortcuts = {
     "KeyS|false|false|true|false": { "event": Events.UserSaveDocument },
     "KeyS|false|true|false|false": { "event": Events.UserSaveDocument },
     "KeyN|false|false|true|false": { "event": Events.UserNewDocument },
-    // "Delete|false|false|true|false": { "event": Events.UserDeleteDocument },
+    "KeyT|false|true|true|false": { "event": Events.UserToggleTheme },
 
     // prompts
     "KeyP|false|false|true|false": { "event": Events.UserToggle, "scope": "view" },

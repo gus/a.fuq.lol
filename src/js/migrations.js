@@ -33,9 +33,18 @@ function migrationPortOldNamespaceDocs() {
     });
 }
 
+function migrationSetDefaultTheme() {
+    let savedTheme = localStorage.getItem(FuqDBThemeKey);
+    if (!savedTheme) {
+        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)");
+        localStorage.setItem(FuqDBThemeKey, prefersDark ? "dark" : "light");
+    }
+}
+
 const Migrations = [
     migrationRemoveLastSavedKey,
     migrationPortOldNamespaceDocs,
+    migrationSetDefaultTheme,
 ];
 
 function runMigrations(migrations) {

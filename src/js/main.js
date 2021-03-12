@@ -70,6 +70,16 @@ function main() {
         db.deleteDocument(curDoc.document);
     });
 
+    document.addEventListener(Events.UserToggleTheme, ev => {
+        const savedTheme = db.load(FuqDBThemeKey);
+        const newTheme = savedTheme === "dark" ? "light" : "dark";
+
+        let $html = document.querySelector("html");
+        $html.classList.remove(savedTheme);
+        $html.classList.add(newTheme);
+        db.save(FuqDBThemeKey, newTheme);
+    });
+
     curDoc.addEventListener(Events.DocumentChange, ev => {
         curDoc.empty() ? $viewer.primary() : $viewer.secondary();
     });
@@ -85,6 +95,10 @@ function main() {
         }
     });
 
+    // default theme handling
+    document.querySelector("html").classList.add(db.load(FuqDBThemeKey));
+
+    // default document handling
     curDoc.document = db.lastSavedDocument(); // try and open the last saved document
     if (curDoc.isOpen()) {
         // there is a current document, but if it has no content just start editing

@@ -42,9 +42,12 @@ function migrationSetDefaultTheme() {
 }
 
 const Migrations = [
-    migrationRemoveLastSavedKey,
-    migrationPortOldNamespaceDocs,
-    migrationSetDefaultTheme,
+    // 2021-03-12
+    // migrationRemoveLastSavedKey,
+    // migrationPortOldNamespaceDocs,
+    // migrationSetDefaultTheme,
+
+    // 2021-09-02
 ];
 
 function runMigrations(migrations) {

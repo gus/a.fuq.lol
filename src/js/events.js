@@ -11,6 +11,7 @@ const Events = {
     UserSaveDocument: "fuq-user-save-document",
     UserNewDocument: "fuq-user-new-document",
     UserDeleteDocument: "fuq-user-delete-document",
+    UserExportDocument: "fuq-user-export-document",
     UserToggle: "fuq-user-toggle",
     UserToggleTheme: "fuq-user-toggle-theme",
 }
@@ -31,6 +32,7 @@ const Shortcuts = {
     "KeyS|false|false|true|false": { "event": Events.UserSaveDocument },
     "KeyS|false|true|false|false": { "event": Events.UserSaveDocument },
     "KeyN|false|false|true|false": { "event": Events.UserNewDocument },
+    "KeyX|true|false|true|false": { "event": Events.UserExportDocument },
     "KeyT|false|true|true|false": { "event": Events.UserToggleTheme },
 
     // prompts

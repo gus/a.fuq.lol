@@ -197,7 +197,7 @@ class CurrentDocument extends EventTarget {
     set title(str) {
         if (this.isOpen()) {
             this._doc.title = str;
-            this.dispatchEvent(new CustomEvent(Events.DocumentTitleChange))
+            this.dispatchEvent(new CustomEvent(Events.DocumentTitleChange));
         }
     }
 
@@ -212,8 +212,12 @@ class CurrentDocument extends EventTarget {
     set content(str) {
         if (this.isOpen()) {
             this._doc.content = str;
-            this.dispatchEvent(new CustomEvent(Events.DocumentContentChange))
+            this.dispatchEvent(new CustomEvent(Events.DocumentContentChange));
         }
+    }
+
+    toString() {
+        return marshalDocument(this._doc);
     }
 }
 

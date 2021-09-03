@@ -70,6 +70,14 @@ function main() {
         db.deleteDocument(curDoc.document);
     });
 
+    document.addEventListener(Events.UserExportDocument, async ev => {
+        ExportDBToZipBlob(db).then(zfile => {
+            const fname = "fuqdocs-export-" + (+new Date()) + ".zip";
+            console.debug("fuqdocs: exporting zip file", fname);
+            saveAs(zfile, fname)
+        });
+    });
+
     document.addEventListener(Events.UserToggleTheme, ev => {
         const savedTheme = db.load(FuqDBThemeKey);
         const newTheme = savedTheme === "dark" ? "light" : "dark";
@@ -119,3 +127,14 @@ function main() {
 }
 
 window.addEventListener("DOMContentLoaded", main);
+
+function deflate(zipURI) {
+    const zr = new zip.ZipReader(new zip.Data64URIReader(zipURI));
+    zr.getEntries().then(entries => {
+        entries[0].getData(new zip.TextWriter()).then(data => {
+            zr.close().then(() => {
+                console.log(data);
+            });
+        });
+    });
+}

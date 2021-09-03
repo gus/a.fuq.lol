@@ -6,7 +6,7 @@ DIST_DIR := dist
 CSS_FILES := $(wildcard $(SRC_DIR)/css/*.css)
 MIN_CSS := $(DIST_DIR)/fuqdocs.min.css
 
-JS_FILES := $(wildcard $(SRC_DIR)/js/*.js)
+JS_FILES := $(wildcard $(SRC_DIR)/js/*.js) $(wildcard $(SRC_DIR)/js/*.js.es6)
 MIN_JS := $(DIST_DIR)/fuqdocs.min.js
 
 EXTRA_FILES_SRC := $(SRC_DIR)/robots.txt $(SRC_DIR)/favicon.ico
@@ -21,7 +21,7 @@ $(DIST_DIR):
 $(MIN_JS): $(JS_FILES)
 	@echo "# minifying js: $^"
 	uglifyjs \
-		--compress --mangle \
+		--compress --mangle --safari10  \
 		--source-map "url='$(patsubst $(DIST_DIR)/%,%,$(MIN_JS)).map'" \
 		--output $(MIN_JS) \
 		-- $(JS_FILES)

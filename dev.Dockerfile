@@ -60,7 +60,7 @@ ARG NODEJS_VERSION=${NODEJS_MAJOR_VERSION}.11.0
 RUN curl -fsSL https://deb.nodesource.com/setup_${NODEJS_MAJOR_VERSION}.x | bash -
 RUN apt-get install -y nodejs && npm install -g npm
 
-RUN npm install -g uglify-js uglifycss
+RUN npm install -g uglify-es uglifycss
 
 ## user setup
 

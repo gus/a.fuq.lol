@@ -24,7 +24,7 @@ function ymd(d) {
  * }
  */
 
-function marshalDocument(doc) {
+function MarshalDocument(doc) {
     if (!doc.id) {
         throw new Error("missing id");
     }
@@ -37,7 +37,7 @@ function marshalDocument(doc) {
     })
 }
 
-function unmarshalDocument(str) {
+function UnmarshalDocument(str) {
     const j = JSON.parse(str);
     if (!j.id) {
         throw new Error("missing id");
@@ -106,7 +106,7 @@ class FuqDB extends EventTarget {
         if (!docStr) {
             return null;
         }
-        return unmarshalDocument(docStr);
+        return UnmarshalDocument(docStr);
     }
 
     lastSavedDocument() {
@@ -121,7 +121,7 @@ class FuqDB extends EventTarget {
 
         const docKey = documentKey(doc);
         doc.updated_at = Date.now();
-        this.save(docKey, marshalDocument(doc));
+        this.save(docKey, MarshalDocument(doc));
 
         this.manifest = [docKey, ...this.manifest.filter(dk => dk !== docKey)];
         this.saveManifest();
@@ -214,10 +214,6 @@ class CurrentDocument extends EventTarget {
             this._doc.content = str;
             this.dispatchEvent(new CustomEvent(Events.DocumentContentChange));
         }
-    }
-
-    toString() {
-        return marshalDocument(this._doc);
     }
 }
 

@@ -69,3 +69,10 @@ This is a **you** problem. I know where I deploy Fuq Docs :)
 Everything in the `dist/` dir is all you need. It's not much and it's all relative URLs,
 so you should just be able to drop all that anywhere you can serve static content. Don't
 just take what's in `src/` as `make build` actually does do some things for you.
+
+## Miscellaneous
+
+Fonts
+
+- Typeface from Google Fonts: Fira Code (monospace), Newsreader (serif), Roboto + Roboto Condensed (sans-serif)
+- Icons from custom Fontawesome kit: v5 free icons 

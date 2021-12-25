@@ -344,7 +344,7 @@ class FuqReader extends FuqComponent {
     }
 
     handleContentChange(ev) {
-        this.$panel.innerHTML = marked(this.doc.content);
+        this.$panel.innerHTML = marked.parse(this.doc.content);
     }
 }
 

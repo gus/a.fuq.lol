@@ -43,6 +43,7 @@ $(EXTRA_FILES_DIST): $(EXTRA_FILES_SRC)
 	cp $^ $(DIST_DIR)
 
 build: $(DIST_DIR) $(DIST_DIR)/index.html $(EXTRA_FILES_DIST)
+	cp src/monaco.html dist
 
 .PHONY: clean
 

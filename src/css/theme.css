@@ -249,7 +249,7 @@ button.alert:hover {
     font-family: var(--font-condensed);
 }
 
-.editor textarea {
+.editor textarea, #textarea {
     background-color: var(--color-background);
     color: var(--color-on-background);
     font-family: var(--font-monospace);

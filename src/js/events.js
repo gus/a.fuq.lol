@@ -33,7 +33,7 @@ const Shortcuts = {
     "KeyS|false|true|false|false": { "event": Events.UserSaveDocument },
     "KeyN|false|false|true|false": { "event": Events.UserNewDocument },
     "KeyX|true|false|true|false": { "event": Events.UserExportDocument },
-    "KeyT|false|true|true|false": { "event": Events.UserToggleTheme },
+    "KeyM|true|false|true|false": { "event": Events.UserToggleTheme },
 
     // prompts
     "KeyP|false|false|true|false": { "event": Events.UserToggle, "scope": "view" },

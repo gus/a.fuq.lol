@@ -12,10 +12,10 @@ function main() {
     const db = new FuqDB();
     const curDoc = new CurrentDocument();
     const storageObs = new FuqStorageObserver(curDoc, db);
+    const editor = new FuqMonacoEditor(document.querySelector("#editor"), curDoc);
+    const reader = new FuqReader(document.querySelector("#reader"), curDoc);
 
-    const $viewer = new FuqComponentSwapper(
-        new FuqEditor(document.querySelector("#editor"), curDoc),
-        new FuqReader(document.querySelector("#reader"), curDoc));
+    const $viewer = new FuqComponentSwapper(editor, reader);
 
     const $prompts = new FuqComponentToggler();
     document.querySelectorAll(".prompt").forEach($prompt => {
@@ -85,6 +85,7 @@ function main() {
         let $html = document.querySelector("html");
         $html.classList.remove(savedTheme);
         $html.classList.add(newTheme);
+        editor.updateTheme(newTheme);
         db.save(FuqDBThemeKey, newTheme);
     });
 
@@ -105,6 +106,7 @@ function main() {
 
     // default theme handling
     document.querySelector("html").classList.add(db.load(FuqDBThemeKey));
+    editor.updateTheme(db.load(FuqDBThemeKey));
 
     // default document handling
     curDoc.document = db.lastSavedDocument(); // try and open the last saved document

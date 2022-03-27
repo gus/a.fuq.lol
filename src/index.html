@@ -31,11 +31,16 @@
 
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link
-        href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Newsreader:ital,wght@0,400;0,600;1,400;1,600&family=Roboto+Condensed:wght@400;700&family=Roboto+Mono:ital,wght@0,400;0,600;1,400;1,600&family=Roboto+Slab:wght@400;700&family=Roboto:ital,wght@0,400;0,700;1,400;1,700&family=Volkhov:ital,wght@0,400;0,700;1,400;1,700&display=swap"
-        rel="stylesheet">
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Newsreader:ital,wght@0,400;0,600;1,400;1,600&family=Roboto+Condensed:wght@400;700&family=Roboto+Mono:ital,wght@0,400;0,600;1,400;1,600&family=Roboto+Slab:wght@400;700&family=Roboto:ital,wght@0,400;0,700;1,400;1,700&family=Volkhov:ital,wght@0,400;0,700;1,400;1,700&display=swap">
     <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.5.0/build/styles/monokai.min.css">
     <link rel="stylesheet" type="text/css" href="./fuqdocs.min.css?t={{ TIMESTAMP }}">
+
+    <link
+        rel="stylesheet"
+        data-name="vs/editor/editor.main"
+        href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.34.0-dev.20220327/min/vs/editor/editor.main.min.css">
 
     <script src="https://kit.fontawesome.com/b4b0919dd0.js" crossorigin="anonymous"></script>
 </head>
@@ -74,7 +79,7 @@
                 <div class="tr">
                     <i class="fab fa-markdown"></i>
                     <span class="label">Toggle editor</span>
-                    <span class="shortcut">Alt + p</span>,
+                    <!-- <span class="shortcut">Alt + p</span>, -->
                     <span class="shortcut">Ctrl + p</span>
                 </div>
                 <div class="tr">
@@ -119,13 +124,18 @@
                 <div class="tr">
                     <i class="fas fa-adjust"></i>
                     <span class="label">Toggle light/dark mode</span>
-                    <span class="shortcut">Ctrl + Alt + t</span>
+                    <span class="shortcut">Alt + Shift + m</span>
                 </div>
                 <hr>
                 <div class="tr">
                     <i class="fas fa-sad-cry"></i>
                     <span class="label">Cancel (any prompt)</span>
                     <span class="shortcut">Esc</span>
+                </div>
+                <div class="tr">
+                    <i class="fas fa-sad-cry"></i>
+                    <span class="label">Shortcuts</span>
+                    <span class="shortcut">Alt + /</span>
                 </div>
                 <div class="tr">
                     <i class="fas fa-info-circle"></i>
@@ -151,8 +161,8 @@
             <button class="cancel">Cancel</button>
         </div>
 
-        <div id='editor' class="editor" style="display: none">
-            <textarea name="content" tabindex="1" spellcheck></textarea>
+        <div id="editor" class="editor" style="display: none">
+            <div id="textarea"></div>
         </div>
 
         <div id="reader" class="reader" style="display: none"></div>
@@ -164,7 +174,7 @@
                     <span class="message"></span>
                 </div>
                 <div class="section right">
-                    <span><i class="far fa-keyboard"></i> <span class="shortcut">Ctrl + /</span></span>
+                    <span><i class="far fa-keyboard"></i> <span class="shortcut">Alt + /</span></span>
                 </div>
             </div>
         </div>
@@ -188,6 +198,17 @@
     <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.5.0/build/highlight.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="./fuqdocs.min.js?t={{ TIMESTAMP }}"></script>
+
+    <script>
+        var require = {
+            paths: {
+                vs: "https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.34.0-dev.20220327/min/vs"
+            }
+        };
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.34.0-dev.20220327/min/vs/loader.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.34.0-dev.20220327/min/vs/editor/editor.main.nls.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.34.0-dev.20220327/min/vs/editor/editor.main.js"></script>
 </body>
 
 </html>

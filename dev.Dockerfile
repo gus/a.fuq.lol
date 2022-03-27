@@ -55,8 +55,8 @@ RUN apt-get install -y ${INSTALL_COMMON_PKGS}
 ## dev env setup
 
 # install nodejs; change the version to upgrade to a newer version
-ARG NODEJS_MAJOR_VERSION=15
-ARG NODEJS_VERSION=${NODEJS_MAJOR_VERSION}.11.0
+ARG NODEJS_MAJOR_VERSION=17
+ARG NODEJS_VERSION=${NODEJS_MAJOR_VERSION}.8.0
 RUN curl -fsSL https://deb.nodesource.com/setup_${NODEJS_MAJOR_VERSION}.x | bash -
 RUN apt-get install -y nodejs && npm install -g npm
 

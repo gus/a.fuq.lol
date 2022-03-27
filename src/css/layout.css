@@ -33,6 +33,7 @@
     transform: translate(-50%, 0);
     max-height: 50%;
     overflow-y: auto;
+    z-index: 100;
 }
 
 .prompt .table .tr {
@@ -71,10 +72,9 @@
     flex-direction: column;
 }
 
-.editor textarea {
+.editor #textarea {
     display: block;
     flex-grow: 1;
-    padding: 0.5rem 0.5rem 2.5rem 0.5rem ;
     width: 100%;
     height: 100%;
     overflow: auto;

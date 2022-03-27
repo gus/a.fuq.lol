@@ -311,26 +311,41 @@ class FuqComponent extends EventTarget {
     }
 }
 
-class FuqEditor extends FuqComponent {
+class FuqMonacoEditor extends FuqComponent {
     constructor($panel, curDoc) {
         super($panel, curDoc);
         this.doc = curDoc;
-        this.$editor = $panel.querySelector("textarea");
+        this.$editor = $panel.querySelector("#textarea");
 
+        this.monaco = monaco.editor.create(this.$editor, {
+            language: "markdown",
+            theme: "vs-dark",
+            automaticLayout: true,
+            fontFamily: "Fira Code",
+            formatOnPaste: true,
+            formatOnType: true,
+            scrollBeyondLastLine: true,
+            renderWhitespace: "none"
+        });
+    
         let self = this;
-        this.$editor.addEventListener("input", ev => { self.handleInputChange(ev) })
+        this.monaco.onDidChangeModelContent(ev => { self.handleInputChange(ev) })
     }
 
     handleDocumentChange(ev) {
-        this.$editor.value = this.doc.content;
+        this.monaco.setValue(this.doc.content);
     }
 
     handleInputChange(ev) {
-        this.doc.content = this.$editor.value;
+        this.doc.content = this.monaco.getValue();
     }
 
     focus() {
-        this.$editor.focus();
+        this.monaco.focus();
+    }
+
+    updateTheme(theme) {
+        this.monaco.updateOptions({theme: "vs-"+theme})
     }
 }
 

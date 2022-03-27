@@ -25,15 +25,17 @@ your mouse except choose a document to open and even that should stop soon,
 hopefully. You can always key in \`Ctrl+/\` to see the available shortcuts,
 but ... in case that's too much work right now, here are the current shortcuts:
 
-| Command                  | Shortcut |
-| ------------------------ | -------- |
-| Toggle the editor/reader | \`Alt+p\`|
-| Rename document...       | \`Alt+t\`|
-| Save document            | \`Alt+s\`|
-| New document             | \`Alt+n\`|
-| Delete document          | \`Alt+Delete\`|
-| Open document            | \`Alt+o\`|
-| About Fuq Docs           | \`Alt+Shift+?\`|
+| Command                  | Shortcut        |
+| ------------------------ | --------        |
+| Toggle the editor/reader | \`Ctrl+p\`      |
+| Rename document...       | \`Alt+t\`       |
+| Save document            | \`Alt+s\`       |
+| New document             | \`Alt+n\`       |
+| Delete document          | \`Alt+Delete\`  |
+| Open document            | \`Alt+o\`       |
+| Help                     | \`Alt+/\`       |
+| Toggle light/dark mode   | \`Alt+Shift+m\` |
+| About Fuq Docs           | \`Alt+Shift+?\` |
 
 Try it now! Type \`Alt+n\` to start a new document. Make sure to set a title
 or auto-save won't work.

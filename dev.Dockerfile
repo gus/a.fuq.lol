@@ -1,4 +1,4 @@
-FROM debian:testing-slim
+FROM debian:bullseye-slim
 
 ## base setup
 

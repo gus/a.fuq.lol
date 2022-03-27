@@ -138,7 +138,10 @@ function process_template_dir() {
     local srcdir=${1}
     local dstdir=${2}
 
-    test -d "${srcdir}" || die "source directory does not exist: '${srcdir}'"
+    test -d "${srcdir}" || {
+        log_warn "source directory does not exist: '${srcdir}'";
+        return;
+    }
     test -d "${dstdir}" || die "destination directory does not exist: '${dstdir}'"
 
     # create subdirs ahead of time (skip .git dirs)
